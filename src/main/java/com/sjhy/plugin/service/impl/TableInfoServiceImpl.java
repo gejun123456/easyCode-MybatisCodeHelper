@@ -76,6 +76,7 @@ public class TableInfoServiceImpl implements TableInfoService {
         tableInfo.setObj(dbTable);
         // 设置类名
         tableInfo.setName(nameUtils.getClassName(dbTable.getName()));
+        tableInfo.setOriginTableName(dbTable.getName());
         // 设置注释
         tableInfo.setComment(dbTable.getComment());
         // 设置所有列

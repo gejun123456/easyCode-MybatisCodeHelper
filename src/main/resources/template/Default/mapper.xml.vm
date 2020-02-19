@@ -14,14 +14,15 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="$!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Dao">
 
-    <resultMap type="$!{tableInfo.savePackageName}.entity.$!{tableInfo.name}" id="$!{tableInfo.name}Map">
+    <resultMap id="BaseResultMap" type="$!{tableInfo.savePackageName}.entity.$!{tableInfo.name}">
+        <!--@Table $!{tableInfo.originTableName}-->
 #foreach($column in $tableInfo.fullColumn)
         <result property="$!column.name" column="$!column.obj.name" jdbcType="$!column.ext.jdbcType"/>
 #end
     </resultMap>
 
     <!--查询单个-->
-    <select id="queryById" resultMap="$!{tableInfo.name}Map">
+    <select id="queryById" resultMap="BaseResultMap">
         select
           #allSqlColumn()
 
@@ -30,7 +31,7 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
     </select>
 
     <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="$!{tableInfo.name}Map">
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
           #allSqlColumn()
 
@@ -39,7 +40,7 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
     </select>
 
     <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="$!{tableInfo.name}Map">
+    <select id="queryAll" resultMap="BaseResultMap">
         select
           #allSqlColumn()
 

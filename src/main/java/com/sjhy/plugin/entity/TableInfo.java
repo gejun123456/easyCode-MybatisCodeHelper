@@ -33,6 +33,11 @@ public class TableInfo {
      * 表名（首字母大写）
      */
     private String name;
+
+    /**
+     * 原始表名
+     */
+    private String originTableName;
     /**
      * 表名前缀
      */

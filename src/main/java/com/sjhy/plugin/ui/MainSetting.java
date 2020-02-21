@@ -317,7 +317,7 @@ public class MainSetting implements Configurable, Configurable.Composite {
     @Nls
     @Override
     public String getDisplayName() {
-        return "Easy Code";
+        return "EasyCode-MybatisCodeHelper";
     }
 
     /**

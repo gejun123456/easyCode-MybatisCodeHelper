@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'
 
-group 'com.sjhy'
+group 'com.bruce'
 version '1.2.3-RELEASE'
 
 sourceCompatibility = JavaVersion.VERSION_1_8

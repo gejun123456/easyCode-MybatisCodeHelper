@@ -1,5 +1,9 @@
 package com.sjhy.plugin.tool;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,6 +16,26 @@ import java.util.regex.Pattern;
  */
 public class NameUtils {
     private volatile static NameUtils nameUtils;
+
+
+    private static Map<String, String> javaToKtTypesMap = new HashMap<String, String>() {{
+        put("java.lang.Byte", "kotlin.Byte");
+        put("java.lang.Short", "kotlin.Short");
+        put("java.lang.Integer", "kotlin.Int");
+        put("java.lang.Long", "kotlin.Long");
+        put("java.lang.Character", "kotlin.Char");
+        put("java.lang.Float", "kotlin.Float");
+        put("java.lang.Double", "kotlin.Double");
+        put("java.lang.Boolean", "kotlin.Boolean");
+        put("byte", "kotlin.Byte");
+        put("short", "kotlin.Short");
+        put("int", "kotlin.Int");
+        put("long", "kotlin.Long");
+        put("char", "kotlin.Char");
+        put("float", "kotlin.Float");
+        put("double", "kotlin.Double");
+        put("boolean", "kotlin.Boolean");
+    }};
 
     /**
      * 单例模式
@@ -109,6 +133,15 @@ public class NameUtils {
             return fullName;
         }
         return fullName.substring(0, genericIdx);
+    }
+
+
+    public String getKtClsNameByFullName(String fullName) {
+        String resultName = fullName;
+        if (javaToKtTypesMap.containsKey(fullName)) {
+            resultName = javaToKtTypesMap.get(fullName);
+        }
+        return getClsNameByFullName(resultName);
     }
 
     /**

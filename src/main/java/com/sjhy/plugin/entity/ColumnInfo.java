@@ -36,6 +36,11 @@ public class ColumnInfo {
      * 短类型
      */
     private String shortType;
+
+    /**
+     * kotlin短类型
+     */
+    private String ktShortType;
     /**
      * 标记是否为自定义附加列
      */

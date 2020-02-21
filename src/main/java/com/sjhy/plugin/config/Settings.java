@@ -115,6 +115,7 @@ public class Settings implements PersistentStateComponent<Settings> {
         }
         this.templateGroupMap.put(DEFAULT_NAME, loadTemplateGroup(DEFAULT_NAME, "entity.java", "dao.java", "service.java", "serviceImpl.java", "controller.java", "mapper.xml", "debug.json"));
         this.templateGroupMap.put("MybatisPlus", loadTemplateGroup("MybatisPlus", "entity", "dao", "service", "serviceImpl", "controller"));
+        this.templateGroupMap.put("Kotlin", loadTemplateGroup("Kotlin", "entity.kt", "dao.kt", "service.kt", "serviceImpl.kt", "controller.kt", "mapper.xml", "debug.json"));
 
         //配置默认类型映射
         if (this.typeMapperGroupMap == null) {

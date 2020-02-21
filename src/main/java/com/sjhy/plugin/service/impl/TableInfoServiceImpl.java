@@ -17,11 +17,20 @@ import com.sjhy.plugin.entity.ColumnInfo;
 import com.sjhy.plugin.entity.TableInfo;
 import com.sjhy.plugin.entity.TypeMapper;
 import com.sjhy.plugin.service.TableInfoService;
-import com.sjhy.plugin.tool.*;
+import com.sjhy.plugin.tool.CloneUtils;
+import com.sjhy.plugin.tool.CollectionUtil;
+import com.sjhy.plugin.tool.CurrGroupUtils;
+import com.sjhy.plugin.tool.FileUtils;
+import com.sjhy.plugin.tool.NameUtils;
+import com.sjhy.plugin.tool.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -95,6 +104,8 @@ public class TableInfoServiceImpl implements TableInfoService {
             columnInfo.setType(getColumnType(column.getDataType().getSpecification()));
             // 短类型
             columnInfo.setShortType(nameUtils.getClsNameByFullName(columnInfo.getType()));
+
+            columnInfo.setKtShortType(nameUtils.getKtClsNameByFullName(columnInfo.getType()));
             // 列名
             columnInfo.setName(nameUtils.getJavaName(column.getName()));
             // 列注释
@@ -176,6 +187,7 @@ public class TableInfoServiceImpl implements TableInfoService {
                     if (!StringUtils.isEmpty(configColumn.getType())) {
                         // 短类型
                         configColumn.setShortType(nameUtils.getClsNameByFullName(configColumn.getType()));
+                        configColumn.setKtShortType(nameUtils.getKtClsNameByFullName(configColumn.getType()));
                     }
                     // 表注释覆盖
                     if (configColumn.getComment() == null) {

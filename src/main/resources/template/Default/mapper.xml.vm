@@ -15,7 +15,7 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
 <mapper namespace="$!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Dao">
 
     <resultMap id="BaseResultMap" type="$!{tableInfo.savePackageName}.entity.$!{tableInfo.name}">
-        <!--@Table $!{tableInfo.originTableName}-->
+        <!--@Table $!{tableInfo.obj.name}-->
 #foreach($column in $tableInfo.fullColumn)
         <result property="$!column.name" column="$!column.obj.name" jdbcType="$!column.ext.jdbcType"/>
 #end

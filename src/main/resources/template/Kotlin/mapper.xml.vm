@@ -15,67 +15,98 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
 <mapper namespace="$!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Dao">
 
     <resultMap id="BaseResultMap" type="$!{tableInfo.savePackageName}.entity.$!{tableInfo.name}">
-        <!--@Table $!{tableInfo.originTableName}-->
-#foreach($column in $tableInfo.fullColumn)
-        <result property="$!column.name" column="$!column.obj.name" jdbcType="$!column.ext.jdbcType"/>
-#end
+        <!--@Table $!{tableInfo.obj.name}-->
+        #foreach($column in $tableInfo.fullColumn)
+            <result property="$!column.name" column="$!column.obj.name" jdbcType="$!column.ext.jdbcType"/>
+        #end
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="BaseResultMap">
         select
-          #allSqlColumn()
+            #allSqlColumn()
 
-        from $!{tableInfo.obj.parent.name}.$!tableInfo.obj.name
-        where $!pk.obj.name = #{$!pk.name}
+        from $!tableInfo.obj.name
+            where $!pk.obj.name = #{$!pk.name}
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
-          #allSqlColumn()
+        #allSqlColumn()
 
-        from $!{tableInfo.obj.parent.name}.$!tableInfo.obj.name
-        limit #{offset}, #{limit}
+        from $!tableInfo.obj.name
+        <where>
+            #foreach($column in $tableInfo.fullColumn)
+                <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
+                    and $!column.obj.name = #{$!column.name}
+                </if>
+            #end
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="BaseResultMap">
-        select
-          #allSqlColumn()
+    select
+    #allSqlColumn()
 
-        from $!{tableInfo.obj.parent.name}.$!tableInfo.obj.name
+    from $!{tableInfo.obj.parent.name}.$!tableInfo.obj.name
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from $!tableInfo.obj.name
         <where>
-#foreach($column in $tableInfo.fullColumn)
-            <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
-                and $!column.obj.name = #{$!column.name}
-            </if>
-#end
+            #foreach($column in $tableInfo.fullColumn)
+                <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
+                    and $!column.obj.name = #{$!column.name}
+                </if>
+            #end
         </where>
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="$!pk.name" useGeneratedKeys="true">
-        insert into $!{tableInfo.obj.parent.name}.$!{tableInfo.obj.name}(#foreach($column in $tableInfo.otherColumn)$!column.obj.name#if($velocityHasNext), #end#end)
-        values (#foreach($column in $tableInfo.otherColumn)#{$!{column.name}}#if($velocityHasNext), #end#end)
+        insert into $!{tableInfo.obj.name}(#foreach($column in $tableInfo.otherColumn)$!column.obj.name#if($velocityHasNext), #end#end)
+            values (#foreach($column in $tableInfo.otherColumn)#{$!{column.name}}#if($velocityHasNext), #end#end)
+    </insert>
+
+    <insert id="insertBatch" keyProperty="$!pk.name" useGeneratedKeys="true">
+        insert into $!{tableInfo.obj.name}(#foreach($column in $tableInfo.otherColumn)$!column.obj.name#if($velocityHasNext), #end#end)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#foreach($column in $tableInfo.otherColumn)#{entity.$!{column.name}}#if($velocityHasNext), #end#end)
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="$!pk.name" useGeneratedKeys="true">
+        insert into $!{tableInfo.obj.name}(#foreach($column in $tableInfo.otherColumn)$!column.obj.name#if($velocityHasNext), #end#end)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#foreach($column in $tableInfo.otherColumn)#{entity.$!{column.name}}#if($velocityHasNext), #end#end)
+        </foreach>
+        on duplicate key update
+        #foreach($column in $tableInfo.otherColumn)$!column.obj.name = values($!column.obj.name)#if($velocityHasNext),
+        #end#end
+
     </insert>
 
     <!--通过主键修改数据-->
     <update id="update">
-        update $!{tableInfo.obj.parent.name}.$!{tableInfo.obj.name}
+        update $!{tableInfo.obj.name}
         <set>
-#foreach($column in $tableInfo.otherColumn)
-            <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
-                $!column.obj.name = #{$!column.name},
-            </if>
-#end
+            #foreach($column in $tableInfo.otherColumn)
+                <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
+                    $!column.obj.name = #{$!column.name},
+                </if>
+            #end
         </set>
         where $!pk.obj.name = #{$!pk.name}
     </update>
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from $!{tableInfo.obj.parent.name}.$!{tableInfo.obj.name} where $!pk.obj.name = #{$!pk.name}
+        delete from $!{tableInfo.obj.name} where $!pk.obj.name = #{$!pk.name}
     </delete>
 
 </mapper>

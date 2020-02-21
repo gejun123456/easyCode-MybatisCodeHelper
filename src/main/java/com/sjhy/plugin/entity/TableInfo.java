@@ -35,10 +35,6 @@ public class TableInfo {
     private String name;
 
     /**
-     * 原始表名
-     */
-    private String originTableName;
-    /**
      * 表名前缀
      */
     private String preName;

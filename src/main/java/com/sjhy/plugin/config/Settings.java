@@ -24,7 +24,7 @@ import java.util.*;
  * @since 2018/07/18 09:33
  */
 @Data
-@State(name = "EasyCodeSetting", storages = @Storage("easy-code-setting.xml"))
+@State(name = "EasyCodeMybatisCodeHelperSetting", storages = @Storage("easy-code-MybatisCodeHelper-setting.xml"))
 public class Settings implements PersistentStateComponent<Settings> {
     /**
      * 默认名称

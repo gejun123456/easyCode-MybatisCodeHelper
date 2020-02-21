@@ -409,7 +409,7 @@ public class TemplateSettingPanel implements Configurable {
      */
     @Override
     public boolean isModified() {
-        return !settings.getTemplateGroupMap().equals(group) || !settings.getCurrTemplateGroupName().equals(currGroupName);
+        return !settings.getTemplateGroupMap().equals(group);
     }
 
     /**

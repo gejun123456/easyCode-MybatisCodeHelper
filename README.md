@@ -1,4 +1,5 @@
-# EasyCode
+# EasyCodeMybatisCodeHelper
+> 插件fork于easyCode,修改easyCode的代码来支持MybatisCodeHelper插件，如resultMap中添加Table注释，支持Kotlin等
 
 ### EasyCode能做什么？
 
@@ -73,4 +74,4 @@
 > 3. 不要解压zip包，安装时直接选zip包即可。
 > ```  
 
-#### QQ群：[373603580](https://shang.qq.com/wpa/qunwpa?idkey=4d495321e527ec2ce459c0d0d6320414cd9677d92d5287df831d4e1c4ec09740)
+#### QQ群：[914051156](https://shang.qq.com/wpa/qunwpa?idkey=4d495321e527ec2ce459c0d0d6320414cd9677d92d5287df831d4e1c4ec09740)

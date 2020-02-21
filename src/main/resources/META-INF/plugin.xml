@@ -1,7 +1,8 @@
 <idea-plugin>
-    <id>com.sjhy.plugin.easycode</id>
-    <name>Easy Code</name>
-    <vendor email="1353036300@qq.com" url="http://www.shujuhaiyang.com">Easy Code Office Website</vendor>
+    <id>com.bruce.easycode.mybatiscodehelper</id>
+    <name>EasyCode-MybatisCodeHelper</name>
+    <version>1.2.0</version>
+    <vendor email="gejun123456@gmail.com" url="http://brucege.com">EasyCode-MybatisCodeHelper</vendor>
 
     <description><![CDATA[
       <tag>EasyCode,Easy Code,easy,code,code generate,code tools</tag>
@@ -16,6 +17,7 @@
       <li>基于IntelliJ IDEA开发的代码生成插件，支持自定义任意模板（Java，html，js，xml）。</li>
       <li>只要是与数据库相关的代码都可以通过自定义模板来生成。支持数据库类型与java类型映射关系配置。</li>
       <li>支持同时生成生成多张表的代码。每张表有独立的配置信息。完全的个性化定义，规则由你设置。</li>
+      <li>该版本用于兼容MybatisCodeHelper插件，方便MybatisCodeHelper插件做代码补全检测等</li>
     ]]></description>
 
 
@@ -97,6 +99,8 @@
         <li>1.Compatible with idea2020.1</li>
         <li>2.Resolve null pointer exceptions for multiple projects (provided by tangcent)</li>
         <li>3.Optimize some details</li>
+          <li>1.EasyCode插件支持MybatisCodeHelper插件 在resultMap中添加Table注释</li>
+          <li>2.支持Kotlin代码生成</li>
         <li>Thank：tangcent,czb,lyd123qw2008</li>
       </ul>
       <ul>
@@ -256,7 +260,7 @@
 
     <actions>
         <!-- Add your actions here -->
-        <group id="con.sjhy.easy.code.action" class="com.sjhy.plugin.actions.MainActionGroup" text="EasyCode"
+        <group id="con.sjhy.easy.code.action" class="com.sjhy.plugin.actions.MainActionGroup" text="EasyCodeMybatisCodeHelper"
                popup="true">
             <!--生成代码菜单-->
             <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>

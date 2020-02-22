@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
+        maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }  
         mavenCentral()
     }
 }
@@ -22,6 +22,7 @@ version '1.2.3-RELEASE'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+
 repositories {
     jcenter()
     mavenCentral()
@@ -36,10 +37,11 @@ dependencies {
 
 intellij {
 //    插件名称
-    pluginName 'EasyCode-MybatisCodeHelper'
+    pluginName 'EasyCode-MybatisCodeHelper' 
     // 沙箱目录位置，用于保存IDEA的设置，默认在build文件下面，防止clean，放在根目录下。
     sandboxDirectory = "${rootProject.rootDir}/idea-sandbox"
-    // 开发环境运行时使用的版本
+    // 开发环境运行时使用的版本 2018.1.6 LATEST-EAP-SNAPSHOT
+    //测试最新版本
     version '2018.1.6'
     type 'IU'
     // 依赖的插件

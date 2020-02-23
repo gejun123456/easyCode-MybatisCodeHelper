@@ -9,6 +9,7 @@ import com.intellij.openapi.options.UnnamedConfigurable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.*;
 import com.intellij.openapi.ui.ex.MultiLineLabel;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.ExceptionUtil;
 import com.bruce.plugin.config.Settings;
 import com.bruce.plugin.constants.MsgValue;
@@ -123,7 +124,7 @@ public class MainSetting implements Configurable, Configurable.Composite {
 
         // 模板导入事件
         importBtn.addActionListener(e -> {
-            String token = Messages.showInputDialog("Token:", MsgValue.TITLE_INFO, AllIcons.General.PasswordLock, "", new InputValidator() {
+            String token = Messages.showInputDialog("Token:", MsgValue.TITLE_INFO, IconLoader.findIcon("/icondd/passwordLock.png"), "", new InputValidator() {
                 @Override
                 public boolean checkInput(String inputString) {
                     return !StringUtils.isEmpty(inputString);

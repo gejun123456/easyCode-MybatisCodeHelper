@@ -1,36 +1,5 @@
 package com.bruce.plugin.ui;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.intellij.database.model.DasObject;
-import com.intellij.database.model.DasTable;
-import com.intellij.database.psi.DbDataSource;
-import com.intellij.database.psi.DbPsiFacade;
-import com.intellij.database.psi.DbTable;
-import com.intellij.database.util.DasUtil;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.ide.fileTemplates.impl.UrlUtil;
-import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.EditorSettings;
-import com.intellij.openapi.editor.ex.EditorEx;
-import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.DialogBuilder;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.testFramework.LightVirtualFile;
-import com.intellij.ui.CollectionComboBoxModel;
-import com.intellij.util.ExceptionUtil;
-import com.intellij.util.ReflectionUtil;
 import com.bruce.plugin.config.Settings;
 import com.bruce.plugin.constants.MsgValue;
 import com.bruce.plugin.entity.TableInfo;
@@ -44,6 +13,41 @@ import com.bruce.plugin.tool.ProjectUtils;
 import com.bruce.plugin.ui.base.BaseGroupPanel;
 import com.bruce.plugin.ui.base.BaseItemSelectPanel;
 import com.bruce.plugin.ui.base.TemplateEditor;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.intellij.database.model.DasObject;
+import com.intellij.database.model.DasTable;
+import com.intellij.database.psi.DbDataSource;
+import com.intellij.database.psi.DbPsiFacade;
+import com.intellij.database.psi.DbTable;
+import com.intellij.database.util.DasUtil;
+import com.intellij.ide.fileTemplates.FileTemplateManager;
+import com.intellij.ide.fileTemplates.impl.UrlUtil;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.EditorSettings;
+import com.intellij.openapi.editor.ex.EditorEx;
+import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.fileTypes.FileTypeManager;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComboBox;
+import com.intellij.openapi.ui.DialogBuilder;
+import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.IconLoader;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.testFramework.LightVirtualFile;
+import com.intellij.ui.CollectionComboBoxModel;
+import com.intellij.util.ExceptionUtil;
+import com.intellij.util.ReflectionUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -291,7 +295,7 @@ public class TemplateSettingPanel implements Configurable {
         panel.add(comboBox);
 
         // 调试动作按钮
-        DefaultActionGroup actionGroup = new DefaultActionGroup(new AnAction(AllIcons.Debugger.ToolConsole) {
+        DefaultActionGroup actionGroup = new DefaultActionGroup(new AnAction(IconLoader.findIcon("/icondd/toolConsole.png")) {
             @Override
             public void actionPerformed(AnActionEvent e) {
                 // 获取选中的表

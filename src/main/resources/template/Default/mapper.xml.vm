@@ -30,12 +30,29 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
         where $!pk.obj.name = #{$!pk.name}
     </select>
 
+    <!--查询单个-->
+    <select id="queryOne" resultMap="BaseResultMap">
+        select
+          #allSqlColumn()
+
+        from $!{tableInfo.obj.parent.name}.$!tableInfo.obj.name
+        <where>
+#foreach($column in $tableInfo.fullColumn)
+            <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
+                and $!column.obj.name = #{$!column.name}
+            </if>
+#end
+        </where>
+        limit 0, 1
+    </select>
+
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="BaseResultMap">
         select
           #allSqlColumn()
 
         from $!{tableInfo.obj.parent.name}.$!tableInfo.obj.name
+        order by id desc
         limit #{offset}, #{limit}
     </select>
 
@@ -44,6 +61,38 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
         select
           #allSqlColumn()
 
+        from $!{tableInfo.obj.parent.name}.$!tableInfo.obj.name
+        <where>
+#foreach($column in $tableInfo.fullColumn)
+            <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
+                and $!column.obj.name = #{$!column.name}
+            </if>
+#end
+        </where>
+        order by id desc
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryByLimit" resultMap="BaseResultMap">
+        select
+        #allSqlColumn()
+
+        from $!{tableInfo.obj.parent.name}.$!tableInfo.obj.name
+        <where>
+#foreach($column in $tableInfo.fullColumn)
+            <if test="$!tool.firstLowerCase($!{tableInfo.name}).$!column.name != null#if($column.type.equals("java.lang.String")) and $!tool.firstLowerCase($!{tableInfo.name}).$!column.name != ''#end">
+                and $!column.obj.name = #{$!tool.firstLowerCase($!{tableInfo.name}).$!column.name}
+            </if>
+#end
+        </where>
+        order by id desc
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--聚合查询-->
+    <select id="count" resultType="java.lang.Integer">
+        select
+        count(1)
         from $!{tableInfo.obj.parent.name}.$!tableInfo.obj.name
         <where>
 #foreach($column in $tableInfo.fullColumn)

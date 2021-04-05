@@ -32,6 +32,14 @@ public interface $!{tableName} {
     $!{tableInfo.name} queryById($!pk.shortType $!pk.name);
 
     /**
+     * 通过ID查询单条数据
+     *
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @return 实例对象
+     */
+    $!{tableInfo.name} queryOne($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
+
+    /**
      * 查询指定行数据
      *
      * @param offset 查询起始位置
@@ -40,7 +48,6 @@ public interface $!{tableName} {
      */
     List<$!{tableInfo.name}> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
 
-
     /**
      * 通过实体作为筛选条件查询
      *
@@ -48,6 +55,23 @@ public interface $!{tableName} {
      * @return 对象列表
      */
     List<$!{tableInfo.name}> queryAll($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
+
+    /**
+     * 查询指定行数据
+     *
+     * @param offset 查询起始位置
+     * @param limit 查询条数
+     * @return 对象列表
+     */
+    List<$!{tableInfo.name}> queryByLimit(@Param("$!tool.firstLowerCase($!{tableInfo.name})") $!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}), @Param("offset") int offset, @Param("limit") int limit);
+
+    /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @return 行数
+     */
+    int count($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
 
     /**
      * 新增数据

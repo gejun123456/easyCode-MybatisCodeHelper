@@ -2,7 +2,6 @@
     <id>com.bruce.easycode.mybatiscodehelper</id>
     <name>EasyCode-MybatisCodeHelper</name>
     <vendor email="gejun123456@gmail.com" url="http://brucege.com">gejun123456@gmail.com</vendor>
-
     <description><![CDATA[
       <tag>EasyCode,Easy Code,easy,code,code generate,code tools</tag>
       <h3>English:</h3>
@@ -17,7 +16,7 @@
       <li>只要是与数据库相关的代码都可以通过自定义模板来生成。支持数据库类型与java类型映射关系配置。</li>
       <li>支持同时生成生成多张表的代码。每张表有独立的配置信息。完全的个性化定义，规则由你设置。</li>
       <li>该版本用于兼容MybatisCodeHelper插件，方便MybatisCodeHelper插件做代码补全检测等</li>
-          <li>改版本缺乏维护，请使用easyCode插件配合 https://github.com/gejun123456/easyCode-MybatisCodeHelper代码里面的模版使用</li>
+          <li>该版本缺乏维护，请使用Easy Code插件配合 https://github.com/gejun123456/easyCode-MybatisCodeHelper代码里面的模版使用</li>
           <li>qq群:914051156</li>
     ]]></description>
 

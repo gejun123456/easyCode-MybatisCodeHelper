@@ -164,6 +164,8 @@
     <!--必须依赖Velocity插件-->
     <depends>com.intellij.velocity</depends>
 
+    <depends>com.intellij.modules.java</depends>.
+
     <!--扩展点-->
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->

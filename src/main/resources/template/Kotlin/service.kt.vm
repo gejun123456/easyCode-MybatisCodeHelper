@@ -61,7 +61,7 @@ interface $!{tableName} {
      * @param id 主键
      * @return 是否成功
      */
-    fun deleteById(id: Long?): Boolean
+    fun deleteById($!pk.name:$!pk.ktShortType): Boolean
 
 
 }

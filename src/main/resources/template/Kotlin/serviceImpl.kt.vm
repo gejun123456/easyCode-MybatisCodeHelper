@@ -15,6 +15,7 @@ import $!{tableInfo.savePackageName}.entity.$!{tableInfo.name};
 import $!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Dao;
 import $!{tableInfo.savePackageName}.service.$!{tableInfo.name}Service;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,10 +26,10 @@ import java.util.List;
  * @author $!author
  * @since $!time.currTime()
  */
-@Service("$!tool.firstLowerCase($!{tableInfo.name})Service")
-class $!{tableName} implements $!{tableInfo.name}Service {
+@Service("$!{tool.firstLowerCase($!{tableInfo.name})}Service")
+class $!{tableName} : $!{tableInfo.name}Service {
     @Resource
-    private val $!tool.firstLowerCase($!{tableInfo.name})Dao:$!{tableInfo.name}Dao = null
+    private val $!{tool.firstLowerCase($!{tableInfo.name})}Dao:$!{tableInfo.name}Dao = null
 
     /**
      * 通过ID查询单条数据
@@ -36,45 +37,43 @@ class $!{tableName} implements $!{tableInfo.name}Service {
      * @param $!pk.name 主键
      * @return 实例对象
      */
-    @Override
-    fun queryById($!pk.name:$!pk.ktShortType):$!{tableInfo.name} {
-        return this.$!{tool.firstLowerCase($!{tableInfo.name})}Dao.queryById($!pk.name);
+
+    override fun queryById($!pk.name:$!pk.ktShortType):$!{tableInfo.name} {
+        return $!{tool.firstLowerCase($!{tableInfo.name})}Dao.queryById($!pk.name);
     }
 
     /**
-     * 查询多条数据
+     * 分页查询
      *
-     * @param offset 查询起始位置
-     * @param limit 查询条数
-     * @return 对象列表
+     * @param $!{tool.firstLowerCase($!{tableInfo.name})} 筛选条件
+     * @param pageRequest      分页对象
+     * @return 查询结果
      */
-    @Override
-    fun queryAllByLimit(offset:Int, limit:Int):List<$!{tableInfo.name}> {
-        return this.$!{tool.firstLowerCase($!{tableInfo.name})}Dao.queryAllByLimit(offset, limit);
+    override fun queryByPage($!{tool.firstLowerCase($!{tableInfo.name})}: $!{tableInfo.name}, pageRequest: PageRequest): Page<$!{tableInfo.name}> {
+        val total: Long = $!{tool.firstLowerCase($!{tableInfo.name})}Dao.count($!{tool.firstLowerCase($!{tableInfo.name})})
+        return PageImpl($!{tool.firstLowerCase($!{tableInfo.name})}Dao.queryAllByLimit($!{tool.firstLowerCase($!{tableInfo.name})}, pageRequest), pageRequest, total)
     }
 
     /**
      * 新增数据
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @param $!{tool.firstLowerCase($!{tableInfo.name})} 实例对象
      * @return 实例对象
      */
-    @Override
-    fun insert($!tool.firstLowerCase($!{tableInfo.name}):$!{tableInfo.name}):$!{tableInfo.name} {
-        this.$!{tool.firstLowerCase($!{tableInfo.name})}Dao.insert($!tool.firstLowerCase($!{tableInfo.name}));
-        return $!tool.firstLowerCase($!{tableInfo.name});
+    override fun insert($!{tool.firstLowerCase($!{tableInfo.name})}: $!{tableInfo.name}): $!{tableInfo.name} {
+        $!{tool.firstLowerCase($!{tableInfo.name})}Dao.insert($!{tool.firstLowerCase($!{tableInfo.name})})
+        return $!{tool.firstLowerCase($!{tableInfo.name})}
     }
 
     /**
      * 修改数据
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @param $!{tool.firstLowerCase($!{tableInfo.name})} 实例对象
      * @return 实例对象
      */
-    @Override
-    fun update($!tool.firstLowerCase($!{tableInfo.name}):$!{tableInfo.name}):$!{tableInfo.name} {
-        this.$!{tool.firstLowerCase($!{tableInfo.name})}Dao.update($!tool.firstLowerCase($!{tableInfo.name}));
-        return this.queryById($!{tool.firstLowerCase($!{tableInfo.name})}.get$!tool.firstUpperCase($pk.name)());
+    override fun update($!{tool.firstLowerCase($!{tableInfo.name})}: $!{tableInfo.name}): $!{tableInfo.name} {
+        $!{tool.firstLowerCase($!{tableInfo.name})}Dao.update($!{tool.firstLowerCase($!{tableInfo.name})})
+        return queryById($!{tool.firstLowerCase($!{tableInfo.name})}.$!pk.name)
     }
 
     /**
@@ -83,8 +82,7 @@ class $!{tableName} implements $!{tableInfo.name}Service {
      * @param $!pk.name 主键
      * @return 是否成功
      */
-    @Override
-    fun deleteById($!pk.name:$!pk.ktShortType):Boolean {
-        return this.$!{tool.firstLowerCase($!{tableInfo.name})}Dao.deleteById($!pk.name) > 0;
+    override fun deleteById($!pk.name:$!pk.ktShortType):Boolean {
+        return $!{tool.firstLowerCase($!{tableInfo.name})}Dao.deleteById($!pk.name) > 0;
     }
 }

@@ -170,6 +170,7 @@ public class TableInfoDTO {
             columnInfo.setName(field.getName());
             columnInfo.setShortType(field.getType().getPresentableText());
             columnInfo.setType(field.getType().getCanonicalText());
+            columnInfo.setKtShortType(NameUtils.getInstance().getKtClsNameByFullName(field.getType().getCanonicalText()));
             columnInfo.setComment(DocCommentUtils.getComment(field.getDocComment()));
             columnInfo.setCustom(false);
             tableInfo.getFullColumn().add(columnInfo);
@@ -209,6 +210,7 @@ public class TableInfoDTO {
             // 最后一节为短类型
             String[] split = dto.getType().split("\\.");
             columnInfo.setShortType(split[split.length - 1]);
+            columnInfo.setKtShortType(NameUtils.getInstance().getKtClsNameByFullName(dto.getType()));
             columnInfo.setComment(dto.getComment());
             columnInfo.setCustom(dto.getCustom());
             columnInfo.setExt(dto.getExt());

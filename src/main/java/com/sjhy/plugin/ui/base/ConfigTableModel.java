@@ -6,6 +6,7 @@ import com.sjhy.plugin.entity.ColumnInfo;
 import com.sjhy.plugin.entity.TableInfo;
 import com.sjhy.plugin.enums.ColumnConfigType;
 import com.sjhy.plugin.tool.CurrGroupUtils;
+import com.sjhy.plugin.tool.NameUtils;
 import com.sjhy.plugin.tool.StringUtils;
 
 import javax.swing.table.DefaultTableModel;
@@ -119,6 +120,7 @@ public class ConfigTableModel extends DefaultTableModel implements EditableModel
                 }
                 columnInfo.setType(type);
                 columnInfo.setShortType(type.substring(type.lastIndexOf(".") + 1));
+                columnInfo.setKtShortType(NameUtils.getInstance().getKtClsNameByFullName(type));
                 break;
             case 2:
                 columnInfo.setComment((String) value);

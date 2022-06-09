@@ -13,6 +13,7 @@ $!callback.setSavePath($tool.append($tableInfo.savePath, "/dao"))
 
 import $!{tableInfo.savePackageName}.entity.$!{tableInfo.name};
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
@@ -34,20 +35,20 @@ interface $!{tableName} {
     /**
      * 查询指定行数据
      *
-     * @param offset 查询起始位置
-     * @param limit 查询条数
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) 查询条件
+     * @param pageable         分页对象
      * @return 对象列表
      */
-    fun queryAllByLimit(@Param("offset") offset:Int, @Param("limit") limit:Int):List<$!{tableInfo.name}>
+    fun queryAllByLimit($!tool.firstLowerCase($!{tableInfo.name}):$!{tableInfo.name}, @Param("pageable") pageable: Pageable?):List<$!{tableInfo.name}>
 
 
     /**
-     * 通过实体作为筛选条件查询
+     * 统计总行数
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
-     * @return 对象列表
+     * @param cityHey 查询条件
+     * @return 总行数
      */
-    fun queryAll( $!tool.firstLowerCase($!{tableInfo.name}):$!{tableInfo.name}):List<$!{tableInfo.name}>
+    fun count($!tool.firstLowerCase($!{tableInfo.name}):$!{tableInfo.name}): Long
 
     /**
      * 新增数据
@@ -56,6 +57,24 @@ interface $!{tableName} {
      * @return 影响行数
      */
     fun insert($!tool.firstLowerCase($!{tableInfo.name}):$!{tableInfo.name}):Int
+
+
+    /**
+     * 批量新增数据（MyBatis原生foreach方法）
+     *
+     * @param entities List<$!{tableInfo.name}> 实例对象列表
+     * @return 影响行数
+    </CityHey> */
+    fun insertBatch(@Param("entities") entities: List<$!{tableInfo.name}>): Int
+
+    /**
+     * 批量新增或按主键更新数据（MyBatis原生foreach方法）
+     *
+     * @param entities List<CityHey> 实例对象列表
+     * @return 影响行数
+     * @throws org.springframework.jdbc.BadSqlGrammarException 入参是空List的时候会抛SQL语句错误的异常，请自行校验入参
+    </CityHey> */
+    fun insertOrUpdateBatch(@Param("entities") entities: List<$!{tableInfo.name}>): Int
 
     /**
      * 修改数据

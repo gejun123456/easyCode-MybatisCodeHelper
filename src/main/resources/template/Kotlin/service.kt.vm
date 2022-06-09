@@ -25,42 +25,43 @@ interface $!{tableName} {
     /**
      * 通过ID查询单条数据
      *
-     * @param $!pk.name 主键
+     * @param id 主键
      * @return 实例对象
      */
-    fun queryById($!pk.name:$!pk.ktShortType):$!{tableInfo.name}
+    fun queryById(id: Long?): $!{tableInfo.name}?
 
     /**
-     * 查询多条数据
+     * 分页查询
      *
-     * @param offset 查询起始位置
-     * @param limit 查询条数
-     * @return 对象列表
+     * @param $!tool.firstLowerCase($tableInfo.name) 筛选条件
+     * @param pageRequest      分页对象
+     * @return 查询结果
      */
-    fun queryAllByLimit(offset:Int, limit:Int):List<$!{tableInfo.name}>
+    fun queryByPage($!tool.firstLowerCase($tableInfo.name): $!{tableInfo.name}?, pageRequest: PageRequest?): Page<$!{tableInfo.name}?>?
 
     /**
      * 新增数据
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @param $!tool.firstLowerCase($tableInfo.name) 实例对象
      * @return 实例对象
      */
-    fun insert($!tool.firstLowerCase($!{tableInfo.name}):$!{tableInfo.name}):$!{tableInfo.name}
+    fun insert($!tool.firstLowerCase($tableInfo.name): $!{tableInfo.name}?): $!{tableInfo.name}?
 
     /**
      * 修改数据
      *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @param $!tool.firstLowerCase($tableInfo.name) 实例对象
      * @return 实例对象
      */
-    fun update($!tool.firstLowerCase($!{tableInfo.name}):$!{tableInfo.name}):$!{tableInfo.name}
+    fun update($!tool.firstLowerCase($tableInfo.name): $!{tableInfo.name}?): $!{tableInfo.name}?
 
     /**
      * 通过主键删除数据
      *
-     * @param $!pk.name 主键
+     * @param id 主键
      * @return 是否成功
      */
-    fun deleteById($!pk.name:$!pk.ktShortType):Boolean
+    fun deleteById(id: Long?): Boolean
+
 
 }

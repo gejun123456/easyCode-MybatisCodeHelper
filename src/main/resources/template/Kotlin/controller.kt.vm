@@ -35,14 +35,59 @@ class $!{tableName} {
     private val $!tool.firstLowerCase($tableInfo.name)Service:$!{tableInfo.name}Service?=null
 
     /**
+     * 分页查询
+     *
+     * @param $!tool.firstLowerCase($tableInfo.name) 筛选条件
+     * @param pageRequest      分页对象
+     * @return 查询结果
+     */
+    @GetMapping
+    fun queryByPage($!tool.firstLowerCase($tableInfo.name): $!{tableInfo.name}?, pageRequest: PageRequest?): ResponseEntity<Page<$!{tableInfo.name}>> {
+        return ResponseEntity.ok($!tool.firstLowerCase($tableInfo.name)Service!!.queryByPage($!tool.firstLowerCase($tableInfo.name), pageRequest))
+    }
+
+    /**
      * 通过主键查询单条数据
      *
      * @param id 主键
      * @return 单条数据
      */
-    @GetMapping("selectOne")
-    fun selectOne(id:$!pk.ktShortType):$!{tableInfo.name}  {
-        return this.$!{tool.firstLowerCase($tableInfo.name)}Service.queryById(id);
+    @GetMapping("{id}")
+    fun queryById(@PathVariable("id") id: Long?): ResponseEntity<$!{tableInfo.name}> {
+        return ResponseEntity.ok($!tool.firstLowerCase($tableInfo.name)Service!!.queryById(id))
+    }
+
+    /**
+     * 新增数据
+     *
+     * @param $!tool.firstLowerCase($tableInfo.name) 实体
+     * @return 新增结果
+     */
+    @PostMapping
+    fun add($!tool.firstLowerCase($tableInfo.name): $!{tableInfo.name}?): ResponseEntity<$!{tableInfo.name}> {
+        return ResponseEntity.ok($!tool.firstLowerCase($tableInfo.name)Service!!.insert($!tool.firstLowerCase($tableInfo.name)))
+    }
+
+    /**
+     * 编辑数据
+     *
+     * @param $!tool.firstLowerCase($tableInfo.name) 实体
+     * @return 编辑结果
+     */
+    @PutMapping
+    fun edit($!tool.firstLowerCase($tableInfo.name): $!{tableInfo.name}?): ResponseEntity<$!{tableInfo.name}> {
+        return ResponseEntity.ok($!tool.firstLowerCase($tableInfo.name)Service!!.update($!tool.firstLowerCase($tableInfo.name)))
+    }
+
+    /**
+     * 删除数据
+     *
+     * @param id 主键
+     * @return 删除是否成功
+     */
+    @DeleteMapping
+    fun deleteById(id: Long?): ResponseEntity<Boolean> {
+        return ResponseEntity.ok($!tool.firstLowerCase($tableInfo.name)Service!!.deleteById(id))
     }
 
 }

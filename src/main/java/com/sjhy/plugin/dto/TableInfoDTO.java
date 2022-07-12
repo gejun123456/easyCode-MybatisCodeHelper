@@ -70,7 +70,7 @@ public class TableInfoDTO {
     }
 
     private static void merge(TableInfoDTO oldData, TableInfoDTO newData) {
-        if (oldData == null || CollectionUtil.isEmpty(oldData.getFullColumn())) {
+        if (oldData == null) {
             return;
         }
         if (!StringUtils.isEmpty(oldData.getPreName())) {
@@ -88,6 +88,9 @@ public class TableInfoDTO {
         if (!StringUtils.isEmpty(oldData.getSaveModelName())) {
             newData.saveModelName = oldData.getSaveModelName();
         }
+        if (CollectionUtil.isEmpty(oldData.getFullColumn())) {
+            return;
+        }
         // 补充自定义列
         for (ColumnInfoDTO oldColumn : oldData.getFullColumn()) {
             if (!oldColumn.getCustom()) {
@@ -101,6 +104,8 @@ public class TableInfoDTO {
         for (ColumnInfoDTO columnInfo : oldData.getFullColumn()) {
             ColumnInfoDTO newColumn = map.get(columnInfo.getName());
             if (newColumn != null) {
+                // ext属性转移
+                newColumn.setExt(columnInfo.getExt());
                 tmpList.add(newColumn);
             }
         }

@@ -99,6 +99,7 @@ public class MainActionGroup extends ActionGroup {
     private AnAction[] getMenuList() {
         String mainActionId = "com.sjhy.easy.code.action.generate";
         String configActionId = "com.sjhy.easy.code.action.config";
+        String debugActionId = "com.sihy.easy.code.action.debug";
         ActionManager actionManager = ActionManager.getInstance();
         // 代码生成菜单
         AnAction mainAction = actionManager.getAction(mainActionId);
@@ -112,6 +113,15 @@ public class MainActionGroup extends ActionGroup {
             configAction = new ConfigAction("Config Table");
             actionManager.registerAction(configActionId, configAction);
         }
+
+
+        AnAction debugAction = actionManager.getAction(debugActionId);
+        if (debugAction == null) {
+            debugAction = new DebugAction("Debug Table");
+            actionManager.registerAction(debugActionId, debugAction);
+        }
+
+
         AnAction clearConfigAction = new AnAction("Clear Config") {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
@@ -123,8 +133,9 @@ public class MainActionGroup extends ActionGroup {
                 Messages.showInfoMessage(dbTable.getName() + "表配置信息已重置成功", GlobalDict.TITLE_INFO);
             }
         };
+
         // 返回所有菜单
-        return new AnAction[]{mainAction, configAction, clearConfigAction};
+        return new AnAction[]{mainAction, configAction,debugAction, clearConfigAction};
     }
 
 

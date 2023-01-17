@@ -27,6 +27,7 @@ import com.sjhy.plugin.entity.TableInfo;
 import com.sjhy.plugin.entity.Template;
 import com.sjhy.plugin.service.CodeGenerateService;
 import com.sjhy.plugin.service.TableInfoSettingsService;
+import com.sjhy.plugin.tool.CacheDataUtils;
 import com.sjhy.plugin.tool.CollectionUtil;
 import com.sjhy.plugin.tool.ProjectUtils;
 import com.sjhy.plugin.ui.base.EditorSettingsInit;
@@ -65,6 +66,10 @@ public class RealtimeDebugComponent {
         this.mainPanel = new JPanel(new FlowLayout());
         this.init();
         this.refreshTable();
+        DbTable selectDbTable = CacheDataUtils.getInstance().getSelectDbTable();
+        if(selectDbTable!=null&&allTables.containsKey(selectDbTable.toString())){
+            this.comboBox.setSelectedItem(selectDbTable.toString());
+        }
     }
 
     private void init() {

@@ -1,0 +1,2 @@
+#set($javamodelSrcFolder="${projectPath}/src/main/java")
+#set($javaPackageName="com.model")

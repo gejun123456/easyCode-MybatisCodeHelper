@@ -1,12 +1,18 @@
+#* @vtlvariable name="javaPackageName" type="java.lang.String" *#
 ##引入宏定义
 $!{define.vm}
+$!{mybatisCodehelper.vm}
 
 ##使用宏定义设置回调（保存位置与文件后缀）
 #save("/entity", ".java")
 
-##使用宏定义设置包后缀
-#setPackageSuffix("entity")
+#set($entitySavePath = $tool.append(${javamodelSrcFolder},"/",${javaPackageName.replace(".","/")}))
 
+entitySavePath = ${entitySavePath}
+    $!callback.setSavePath($entitySavePath)
+    $!callback.setFileName($tool.append($tableInfo.name, ".java"))
+##使用宏定义设置包后缀
+package ${javaPackageName};
 ##使用全局变量实现默认包导入
 $!{autoImport.vm}
 import java.io.Serializable;

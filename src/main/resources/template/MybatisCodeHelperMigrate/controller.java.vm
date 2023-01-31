@@ -34,17 +34,6 @@ public class $!{tableName} {
     @Resource
     private $!{tableInfo.name}Service $!tool.firstLowerCase($tableInfo.name)Service;
 
-    /**
-     * 分页查询
-     *
-     * @param $!{tool.firstLowerCase($tableInfo.name)} 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
-     */
-    @GetMapping
-    public ResponseEntity<Page<$!{tableInfo.name}>> queryByPage($!{tableInfo.name} $!{tool.firstLowerCase($tableInfo.name)}, PageRequest pageRequest) {
-        return ResponseEntity.ok(this.$!{tool.firstLowerCase($tableInfo.name)}Service.queryByPage($!{tool.firstLowerCase($tableInfo.name)}, pageRequest));
-    }
 
     /**
      * 通过主键查询单条数据

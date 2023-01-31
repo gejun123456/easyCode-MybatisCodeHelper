@@ -44,19 +44,6 @@ public class $!{tableName} implements $!{tableInfo.name}Service {
     }
 
     /**
-     * 分页查询
-     *
-     * @param $!{tool.firstLowerCase($tableInfo.name)} 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
-     */
-    @Override
-    public Page<$!{tableInfo.name}> queryByPage($!{tableInfo.name} $!{tool.firstLowerCase($tableInfo.name)}, PageRequest pageRequest) {
-        long total = this.$!{tool.firstLowerCase($tableInfo.name)}Dao.count($!{tool.firstLowerCase($tableInfo.name)});
-        return new PageImpl<>(this.$!{tool.firstLowerCase($tableInfo.name)}Dao.queryAllByLimit($!{tool.firstLowerCase($tableInfo.name)}, pageRequest), pageRequest, total);
-    }
-
-    /**
      * 新增数据
      *
      * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象

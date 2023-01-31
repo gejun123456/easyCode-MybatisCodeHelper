@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project;
 import com.sjhy.plugin.dto.GenerateOptions;
 import com.sjhy.plugin.entity.TableInfo;
 import com.sjhy.plugin.entity.Template;
+import com.sjhy.plugin.tool.VelocityResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -42,5 +43,5 @@ public interface CodeGenerateService {
      * @param tableInfo 表信息对象
      * @return 生成好的代码
      */
-    String generate(Template template, TableInfo tableInfo);
+    VelocityResult generateDebug(Template template, TableInfo tableInfo);
 }

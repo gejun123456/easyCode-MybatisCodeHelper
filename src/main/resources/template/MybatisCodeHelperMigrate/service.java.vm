@@ -32,15 +32,6 @@ public interface $!{tableName} {
     $!{tableInfo.name} queryById($!pk.shortType $!pk.name);
 
     /**
-     * 分页查询
-     *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 筛选条件
-     * @param pageRequest      分页对象
-     * @return 查询结果
-     */
-    Page<$!{tableInfo.name}> queryByPage($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}), PageRequest pageRequest);
-
-    /**
      * 新增数据
      *
      * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象

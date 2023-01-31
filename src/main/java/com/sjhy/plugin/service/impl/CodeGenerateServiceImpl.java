@@ -161,7 +161,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
                 // 设置回调对象
                 param.put("callback", callback);
                 // 开始生成
-                String code = VelocityUtils.generate(template.getCode(), param);
+                String code = VelocityUtils.generate(template.getCode(), param).getCode();
                 // 设置一个默认保存路径与默认文件名
                 String path = callback.getSavePath();
                 path = path.replace("\\", "/");
@@ -183,7 +183,7 @@ public class CodeGenerateServiceImpl implements CodeGenerateService {
      * @return 生成好的代码
      */
     @Override
-    public String generate(Template template, TableInfo tableInfo) {
+    public VelocityResult generateDebug(Template template, TableInfo tableInfo) {
         // 获取默认参数
         Map<String, Object> param = getDefaultParam();
         // 表信息对象，进行克隆，防止篡改

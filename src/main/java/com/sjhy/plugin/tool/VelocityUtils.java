@@ -1,6 +1,7 @@
 package com.sjhy.plugin.tool;
 
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 
@@ -44,9 +45,11 @@ public class VelocityUtils {
      * @param map      参数集合
      * @return 渲染结果
      */
-    public static String generate(String template, Map<String, Object> map) {
+    public static VelocityResult generate(String template, Map<String, Object> map) {
         // 每次创建一个新实例，防止velocity缓存宏定义
         VelocityEngine velocityEngine = new VelocityEngine(INIT_PROP);
+
+        VelocityResult result = new VelocityResult();
         // 创建上下文对象
         VelocityContext velocityContext = new VelocityContext();
         if (map != null) {
@@ -62,7 +65,12 @@ public class VelocityUtils {
             StringWriter writer = new StringWriter();
             e.printStackTrace(new PrintWriter(writer));
             builder.append(writer.toString());
-            return builder.toString().replace("\r", "");
+
+            String replace = builder.toString().replace("\r", "");
+            result.setCode(replace);
+            result.setFinalTemplate(template);
+            result.setHasError(true);
+            return result;
         }
         String code = stringWriter.toString();
         // 清除前面空格
@@ -71,6 +79,9 @@ public class VelocityUtils {
             sb.deleteCharAt(0);
         }
         // 返回结果
-        return sb.toString();
+        result.setCode(sb.toString());
+        result.setHasError(false);
+        result.setFinalTemplate(template);
+        return result;
     }
 }

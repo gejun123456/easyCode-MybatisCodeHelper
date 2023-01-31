@@ -21,29 +21,16 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
 #end
     </resultMap>
 
-    <!--查询单个-->
-    <select id="queryById" resultMap="BaseResultMap">
-        select
-          #allSqlColumn()
+    <sql id="Base_Column_List">
+        #allSqlColumn()
+    </sql>
 
+    <!--查询单个-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
         from $!tableInfo.obj.name
         where $!pk.obj.name = #{$!pk.name}
-    </select>
-
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="BaseResultMap">
-        select
-          #allSqlColumn()
-
-        from $!tableInfo.obj.name
-        <where>
-#foreach($column in $tableInfo.fullColumn)
-            <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
-                and $!column.obj.name = #{$!column.name}
-            </if>
-#end
-        </where>
-        limit #{pageable.offset}, #{pageable.pageSize}
     </select>
 
     <!--通过实体作为筛选条件查询-->
@@ -69,6 +56,29 @@ $!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
     <insert id="insert" keyProperty="$!pk.name" useGeneratedKeys="true">
         insert into $!{tableInfo.obj.name}(#foreach($column in $tableInfo.otherColumn)$!column.obj.name#if($velocityHasNext), #end#end)
         values (#foreach($column in $tableInfo.otherColumn)#{$!{column.name}}#if($velocityHasNext), #end#end)
+    </insert>
+
+
+    <insert id="insertSelective" keyProperty="$!pk.name" useGeneratedKeys="true">
+        insert into $!{tableInfo.obj.name}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            (
+#foreach($column in $tableInfo.otherColumn)
+                <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
+                    $!{column.obj.name},
+                </if>
+#end
+            )
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            (
+#foreach($column in $tableInfo.otherColumn)
+            <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
+                #{$!column.name},
+            </if>
+#end
+        )
+        </trim>
     </insert>
 
     <insert id="insertBatch" keyProperty="$!pk.name" useGeneratedKeys="true">

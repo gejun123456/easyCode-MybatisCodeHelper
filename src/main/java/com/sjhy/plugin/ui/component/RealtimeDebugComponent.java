@@ -19,6 +19,7 @@ import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBTextArea;
 import com.intellij.util.ExceptionUtil;
 import com.intellij.util.ReflectionUtil;
 import com.intellij.util.containers.JBIterable;
@@ -30,6 +31,7 @@ import com.sjhy.plugin.service.TableInfoSettingsService;
 import com.sjhy.plugin.tool.CacheDataUtils;
 import com.sjhy.plugin.tool.CollectionUtil;
 import com.sjhy.plugin.tool.ProjectUtils;
+import com.sjhy.plugin.tool.VelocityResult;
 import com.sjhy.plugin.ui.base.EditorSettingsInit;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -128,30 +130,63 @@ public class RealtimeDebugComponent {
             tableInfo.setSavePackageName("com.companyname.modulename");
         }
         // 生成代码
-        String code = CodeGenerateService.getInstance(ProjectUtils.getCurrProject()).generate(new Template("temp", editorComponent.getFile().getCode()), tableInfo);
-        String fileName = editorComponent.getFile().getName();
-        // 创建编辑框
-        EditorFactory editorFactory = EditorFactory.getInstance();
-        Document document = editorFactory.createDocument(code);
-        // 标识为模板，让velocity跳过语法校验
-        document.putUserData(FileTemplateManager.DEFAULT_TEMPLATE_PROPERTIES, FileTemplateManager.getInstance(ProjectUtils.getCurrProject()).getDefaultProperties());
-        Editor editor = editorFactory.createViewer(document, ProjectUtils.getCurrProject());
-        // 配置编辑框
-        EditorSettingsInit.init(editor);
-        ((EditorEx) editor).setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(ProjectUtils.getCurrProject(), fileName));
-        // 构建dialog
-        DialogBuilder dialogBuilder = new DialogBuilder(ProjectUtils.getCurrProject());
-        dialogBuilder.setTitle(GlobalDict.TITLE_INFO);
-        JComponent component = editor.getComponent();
-        component.setPreferredSize(new Dimension(800, 600));
-        dialogBuilder.setCenterPanel(component);
-        dialogBuilder.addCloseButton();
-        dialogBuilder.addDisposable(() -> {
-            //释放掉编辑框
-            editorFactory.releaseEditor(editor);
-            dialogBuilder.dispose();
-        });
-        dialogBuilder.show();
+        VelocityResult result = CodeGenerateService.getInstance(ProjectUtils.getCurrProject()).generateDebug(new Template("temp", editorComponent.getFile().getCode()), tableInfo);
+
+        if(result.isHasError()){
+            DialogBuilder dialogBuilder = new DialogBuilder(ProjectUtils.getCurrProject());
+            dialogBuilder.setTitle(GlobalDict.TITLE_INFO);
+            JPanel centerPanel = new JPanel();
+            centerPanel.setLayout(new BorderLayout());
+            JBLabel comp = new JBLabel(result.getCode());
+            centerPanel.add(comp,BorderLayout.NORTH);
+            dialogBuilder.setCenterPanel(centerPanel);
+            String finalTemplate = result.getFinalTemplate();
+            String fileName = editorComponent.getFile().getName();
+            // 创建编辑框
+            EditorFactory editorFactory = EditorFactory.getInstance();
+            Document document = editorFactory.createDocument(finalTemplate);
+            // 标识为模板，让velocity跳过语法校验
+            document.putUserData(FileTemplateManager.DEFAULT_TEMPLATE_PROPERTIES, FileTemplateManager.getInstance(ProjectUtils.getCurrProject()).getDefaultProperties());
+            Editor editor = editorFactory.createViewer(document, ProjectUtils.getCurrProject());
+            // 配置编辑框
+            EditorSettingsInit.init(editor);
+            ((EditorEx) editor).setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(ProjectUtils.getCurrProject(), fileName));
+            JComponent component = editor.getComponent();
+            component.setPreferredSize(new Dimension(800, 600));
+            centerPanel.add(component,BorderLayout.CENTER);
+            dialogBuilder.addCloseButton();
+            dialogBuilder.addDisposable(() -> {
+                //释放掉编辑框
+                editorFactory.releaseEditor(editor);
+                dialogBuilder.dispose();
+            });
+            dialogBuilder.show();
+        } else {
+            String code = result.getCode();
+            String fileName = editorComponent.getFile().getName();
+            // 创建编辑框
+            EditorFactory editorFactory = EditorFactory.getInstance();
+            Document document = editorFactory.createDocument(code);
+            // 标识为模板，让velocity跳过语法校验
+            document.putUserData(FileTemplateManager.DEFAULT_TEMPLATE_PROPERTIES, FileTemplateManager.getInstance(ProjectUtils.getCurrProject()).getDefaultProperties());
+            Editor editor = editorFactory.createViewer(document, ProjectUtils.getCurrProject());
+            // 配置编辑框
+            EditorSettingsInit.init(editor);
+            ((EditorEx) editor).setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(ProjectUtils.getCurrProject(), fileName));
+            // 构建dialog
+            DialogBuilder dialogBuilder = new DialogBuilder(ProjectUtils.getCurrProject());
+            dialogBuilder.setTitle(GlobalDict.TITLE_INFO);
+            JComponent component = editor.getComponent();
+            component.setPreferredSize(new Dimension(800, 600));
+            dialogBuilder.setCenterPanel(component);
+            dialogBuilder.addCloseButton();
+            dialogBuilder.addDisposable(() -> {
+                //释放掉编辑框
+                editorFactory.releaseEditor(editor);
+                dialogBuilder.dispose();
+            });
+            dialogBuilder.show();
+        }
     }
 
     private void refreshTable() {

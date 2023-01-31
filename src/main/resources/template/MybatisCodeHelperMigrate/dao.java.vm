@@ -30,16 +30,7 @@ public interface $!{tableName} {
      * @param $!pk.name 主键
      * @return 实例对象
      */
-    $!{tableInfo.name} queryById($!pk.shortType $!pk.name);
-
-    /**
-     * 查询指定行数据
-     *
-     * @param $!tool.firstLowerCase($!{tableInfo.name}) 查询条件
-     * @param pageable         分页对象
-     * @return 对象列表
-     */
-    List<$!{tableInfo.name}> queryAllByLimit($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}), @Param("pageable") Pageable pageable);
+    $!{tableInfo.name} selectByPrimaryKey($!pk.shortType $!pk.name);
 
     /**
      * 统计总行数
@@ -56,6 +47,15 @@ public interface $!{tableName} {
      * @return 影响行数
      */
     int insert($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
+
+
+    /**
+     * 新增数据
+     *
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @return 影响行数
+     */
+    int insertSelective($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）

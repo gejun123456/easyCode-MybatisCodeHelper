@@ -1,15 +1,19 @@
 ##定义初始变量
-#set($tableName = $tool.append($tableInfo.name, "ServiceImpl"))
+$!{mybatisCodehelper.vm}
+#set($ServiceImplName = $tool.append($tableInfo.name, "ServiceImpl"))
 ##设置回调
-$!callback.setFileName($tool.append($tableName, ".java"))
-$!callback.setSavePath($tool.append($tableInfo.savePath, "/service/impl"))
+##$!callback.setFileName($tool.append($ServiceImplName, ".java"))
+##$!callback.setSavePath($tool.append($tableInfo.savePath, "/service/impl"))
+#set($serviceImplSavePath = $tool.append(${serviceImplSrcFolder},"/",${serviceImplPackageName.replace(".","/")}))
 
+$!callback.setSavePath($serviceImplSavePath)
+$!callback.setFileName($tool.append($ServiceImplName, ".java"))
 ##拿到主键
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
 
-#if($tableInfo.savePackageName)package $!{tableInfo.savePackageName}.#{end}service.impl;
+package $!{serviceImplPackageName};
 
 import $!{tableInfo.savePackageName}.entity.$!{tableInfo.name};
 import $!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Dao;
@@ -28,7 +32,7 @@ import javax.annotation.Resource;
  * @since $!time.currTime()
  */
 @Service("$!tool.firstLowerCase($!{tableInfo.name})Service")
-public class $!{tableName} implements $!{tableInfo.name}Service {
+public class $!{ServiceImplName} implements $!{tableInfo.name}Service {
     @Resource
     private $!{tableInfo.name}Dao $!tool.firstLowerCase($!{tableInfo.name})Dao;
 

@@ -1,15 +1,18 @@
 ##定义初始变量
-#set($tableName = $tool.append($tableInfo.name, "Dao"))
+$!{mybatisCodehelper.vm}
+#set($daoName = $tool.append($tableInfo.name, "Dao"))
 ##设置回调
-$!callback.setFileName($tool.append($tableName, ".java"))
-$!callback.setSavePath($tool.append($tableInfo.savePath, "/dao"))
+#set($daoSavePath = $tool.append(${mapperSrcFolder},"/",${mapperPackageName.replace(".","/")}))
+
+$!callback.setSavePath($daoSavePath)
+$!callback.setFileName($tool.append($daoName, ".java"))
 
 ##拿到主键
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
 
-#if($tableInfo.savePackageName)package $!{tableInfo.savePackageName}.#{end}dao;
+package $!{mapperPackageName};
 
 import $!{tableInfo.savePackageName}.entity.$!{tableInfo.name};
 import org.apache.ibatis.annotations.Param;
@@ -22,7 +25,7 @@ import java.util.List;
  * @author $!author
  * @since $!time.currTime()
  */
-public interface $!{tableName} {
+public interface $!{daoName} {
 
     /**
      * 通过ID查询单条数据

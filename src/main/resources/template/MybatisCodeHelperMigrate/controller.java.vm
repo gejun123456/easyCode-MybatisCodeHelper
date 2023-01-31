@@ -1,14 +1,17 @@
 ##定义初始变量
-#set($tableName = $tool.append($tableInfo.name, "Controller"))
+$!{mybatisCodehelper.vm}
+#set($controllerName = $tool.append($tableInfo.name, "Controller"))
 ##设置回调
-$!callback.setFileName($tool.append($tableName, ".java"))
-$!callback.setSavePath($tool.append($tableInfo.savePath, "/controller"))
+#set($controllerSavePath = $tool.append(${controllerSrcFolder},"/",${controllerPackageName.replace(".","/")}))
+
+$!callback.setSavePath($controllerSavePath)
+$!callback.setFileName($tool.append($controllerName, ".java"))
 ##拿到主键
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end
 
-#if($tableInfo.savePackageName)package $!{tableInfo.savePackageName}.#{end}controller;
+package ${controllerPackageName};
 
 import $!{tableInfo.savePackageName}.entity.$!{tableInfo.name};
 import $!{tableInfo.savePackageName}.service.$!{tableInfo.name}Service;
@@ -27,7 +30,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("$!tool.firstLowerCase($tableInfo.name)")
-public class $!{tableName} {
+public class $!{controllerName} {
     /**
      * 服务对象
      */

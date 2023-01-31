@@ -2,10 +2,12 @@
 $!{mybatisSupport.vm}
 
 ##设置保存名称与保存位置
+#set($XmlSavePath = $tool.append(${mapperXmlFolder},"/",${mapperXmlPackage.replace(".","/")}))
+$!callback.setSavePath($XmlSavePath)
 $!callback.setFileName($tool.append($!{tableInfo.name}, "Dao.xml"))
-$!callback.setSavePath($tool.append($modulePath, "/src/main/resources/mapper"))
 
-##拿到主键
+
+    ##拿到主键
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
 #end

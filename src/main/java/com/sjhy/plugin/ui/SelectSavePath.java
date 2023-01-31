@@ -4,6 +4,7 @@ import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
@@ -27,6 +28,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.lang.reflect.Constructor;
@@ -91,6 +94,7 @@ public class SelectSavePath extends DialogWrapper {
      * 弹框全否复选框
      */
     private JCheckBox titleRefuseCheckBox;
+    private JButton setFolderAndPackageButton;
     /**
      * 数据缓存工具类
      */
@@ -160,6 +164,13 @@ public class SelectSavePath extends DialogWrapper {
         setTitle(GlobalDict.TITLE_INFO);
         //初始化路径
         refreshPath();
+
+        setFolderAndPackageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ShowSettingsUtil.getInstance().showSettingsDialog(null,GlobalConfigSettingForm.class);
+            }
+        });
     }
 
     private void initEvent() {

@@ -15,3 +15,4 @@
 #set($useSwagger=true)
 #set($useOpenApi=true)
 #set($addSchemaName=false)
+#set($mapperSuffix="Dao")

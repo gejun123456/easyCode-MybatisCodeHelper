@@ -1,6 +1,6 @@
 ##following code can be generated use MybatisCodeHelperPro plugin mybatis generator mingrate to template generate.
 #set($javamodelSrcFolder="${projectPath}/src/main/java")
-#set($javaPackageName="com.model")
+#set($modelPackageName="com.model")
 #set($mapperSrcFolder="${projectPath}/src/main/java")
 #set($mapperPackageName="com.mapper")
 #set($mapperXmlFolder="${projectPath}/src/main/resources")

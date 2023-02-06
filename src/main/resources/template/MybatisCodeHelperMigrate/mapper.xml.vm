@@ -17,7 +17,7 @@ $!callback.setFileName($tool.append($!{tableInfo.name}, $!{mapperSuffix},".xml")
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="$!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Dao">
 
-    <resultMap id="BaseResultMap" type="$!{javaPackageName}.$!{tableInfo.name}">
+    <resultMap id="BaseResultMap" type="$!{modelPackageName}.$!{tableInfo.name}">
         <!--@Table $!{tableInfo.obj.name}-->
 #foreach($column in $tableInfo.fullColumn)
         <result property="$!column.name" column="$!column.obj.name" jdbcType="$!column.ext.jdbcType"/>

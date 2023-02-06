@@ -14,7 +14,7 @@ $!callback.setFileName($tool.append($daoName, ".java"))
 
 package $!{mapperPackageName};
 
-import $!{javaPackageName}.$!{tableInfo.name};
+import $!{modelPackageName}.$!{tableInfo.name};
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 

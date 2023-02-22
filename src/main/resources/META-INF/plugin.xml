@@ -290,7 +290,7 @@
 
     <actions>
         <!-- Add your actions here -->
-        <group id="con.sjhy.easy.code.action" class="com.sjhy.plugin.actions.MainActionGroup" text="EasyCodeMybatisCodeHelper"
+        <group id="con.sjhy.easyCodeMybatisCodeHelper.action" class="com.sjhy.plugin.actions.MainActionGroup" text="EasyCodeMybatisCodeHelper"
                popup="true">
             <!--生成代码菜单-->
             <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>

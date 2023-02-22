@@ -97,9 +97,9 @@ public class MainActionGroup extends ActionGroup {
      * @return 子菜单数组
      */
     private AnAction[] getMenuList() {
-        String mainActionId = "com.sjhy.easy.code.action.generate";
-        String configActionId = "com.sjhy.easy.code.action.config";
-        String debugActionId = "com.sihy.easy.code.action.debug";
+        String mainActionId = "com.sjhy.easycodeMybatisCodeHelper.action.generate";
+        String configActionId = "com.sjhy.easycodeMybatisCodeHelper.action.config";
+        String debugActionId = "com.sihy.easycodeMybatisCodeHelper.action.debug";
         ActionManager actionManager = ActionManager.getInstance();
         // 代码生成菜单
         AnAction mainAction = actionManager.getAction(mainActionId);

@@ -68,22 +68,18 @@ $!callback.setFileName($tool.append($!{tableInfo.name}, $!{mapperSuffix},".xml")
     <insert id="insertSelective" keyProperty="$!pk.name" useGeneratedKeys="true">
         insert into $!{tableInfo.obj.name}
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            (
 #foreach($column in $tableInfo.otherColumn)
                 <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
                     $!{column.obj.name},
                 </if>
 #end
-            )
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            (
 #foreach($column in $tableInfo.otherColumn)
             <if test="$!column.name != null#if($column.type.equals("java.lang.String")) and $!column.name != ''#end">
                 #{$!column.name},
             </if>
 #end
-        )
         </trim>
     </insert>
 

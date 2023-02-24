@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 #tableComment("实体类")
 
 ##check if use lombok
+
 #if(${useLombok})
 @Data
 #end
@@ -38,7 +39,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @ApiModel(value = "$!{tableInfo.name}", description = "$!{tableInfo.comment}")
 #end
 #if($useOpenApi)
-@Schema(name = "$!{tableInfo.name}", description = "$!{tableInfo.comment}"
+@Schema(name = "$!{tableInfo.name}", description = "$!{tableInfo.comment}")
 #end
 public class $!{tableInfo.name} implements Serializable {
     private static final long serialVersionUID = $!tool.serial();
@@ -52,7 +53,9 @@ public class $!{tableInfo.name} implements Serializable {
     #if($useOpenApi)
     @Schema(description = "${column.comment}")
     #end
+
     private $!{tool.getClsNameByFullName($column.type)} $!{column.name};
+
 #end
 
 #foreach($column in $tableInfo.fullColumn)

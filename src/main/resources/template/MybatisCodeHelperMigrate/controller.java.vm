@@ -13,11 +13,8 @@ $!callback.setFileName($tool.append($controllerName, ".java"))
 
 package ${controllerPackageName};
 
-import $!{tableInfo.savePackageName}.entity.$!{tableInfo.name};
-import $!{tableInfo.savePackageName}.service.$!{tableInfo.name}Service;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
+import $!{modelPackageName}.$!{tableInfo.name}};
+import ${servicePackageName}.$!{tableInfo.name}Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

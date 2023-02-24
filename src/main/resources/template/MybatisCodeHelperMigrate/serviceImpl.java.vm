@@ -8,6 +8,8 @@ $!{mybatisCodehelper.vm}
 
 $!callback.setSavePath($serviceImplSavePath)
 $!callback.setFileName($tool.append($ServiceImplName, ".java"))
+
+#set($daoName = $tool.append($tableInfo.name, ${daoSuffix}))
 ##拿到主键
 #if(!$tableInfo.pkColumn.isEmpty())
     #set($pk = $tableInfo.pkColumn.get(0))
@@ -15,13 +17,10 @@ $!callback.setFileName($tool.append($ServiceImplName, ".java"))
 
 package $!{serviceImplPackageName};
 
-import $!{tableInfo.savePackageName}.entity.$!{tableInfo.name};
-import $!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Dao;
-import $!{tableInfo.savePackageName}.service.$!{tableInfo.name}Service;
+import $!{modelPackageName}.$!{tableInfo.name};
+import ${mapperPackageName}.${daoName};
+import ${servicePackageName}.$!{tableInfo.name}Service;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
 
@@ -34,7 +33,7 @@ import javax.annotation.Resource;
 @Service("$!tool.firstLowerCase($!{tableInfo.name})Service")
 public class $!{ServiceImplName} implements $!{tableInfo.name}Service {
     @Resource
-    private $!{tableInfo.name}Dao $!tool.firstLowerCase($!{tableInfo.name})Dao;
+    private ${daoName} $!tool.firstLowerCase($daoName);
 
     /**
      * 通过ID查询单条数据
@@ -44,7 +43,7 @@ public class $!{ServiceImplName} implements $!{tableInfo.name}Service {
      */
     @Override
     public $!{tableInfo.name} queryById($!pk.shortType $!pk.name) {
-        return this.$!{tool.firstLowerCase($!{tableInfo.name})}Dao.queryById($!pk.name);
+        return this.$!{tool.firstLowerCase($daoName)}.selectByPrimaryKey($!pk.name);
     }
 
     /**
@@ -55,7 +54,7 @@ public class $!{ServiceImplName} implements $!{tableInfo.name}Service {
      */
     @Override
     public $!{tableInfo.name} insert($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name})) {
-        this.$!{tool.firstLowerCase($!{tableInfo.name})}Dao.insert($!tool.firstLowerCase($!{tableInfo.name}));
+        this.$!{tool.firstLowerCase($daoName)}.insert($!tool.firstLowerCase($!{tableInfo.name}));
         return $!tool.firstLowerCase($!{tableInfo.name});
     }
 
@@ -67,7 +66,7 @@ public class $!{ServiceImplName} implements $!{tableInfo.name}Service {
      */
     @Override
     public $!{tableInfo.name} update($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name})) {
-        this.$!{tool.firstLowerCase($!{tableInfo.name})}Dao.update($!tool.firstLowerCase($!{tableInfo.name}));
+        this.$!{tool.firstLowerCase($daoName)}.update($!tool.firstLowerCase($!{tableInfo.name}));
         return this.queryById($!{tool.firstLowerCase($!{tableInfo.name})}.get$!tool.firstUpperCase($pk.name)());
     }
 
@@ -79,6 +78,6 @@ public class $!{ServiceImplName} implements $!{tableInfo.name}Service {
      */
     @Override
     public boolean deleteById($!pk.shortType $!pk.name) {
-        return this.$!{tool.firstLowerCase($!{tableInfo.name})}Dao.deleteById($!pk.name) > 0;
+        return this.$!{tool.firstLowerCase($daoName)}.deleteById($!pk.name) > 0;
     }
 }

@@ -280,17 +280,17 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <!--实例化配置信息服务-->
-        <applicationService serviceImplementation="com.sjhy.plugin.service.impl.SettingsStorageServiceImpl"/>
+        <applicationService serviceImplementation="com.bruce.plugin.service.impl.SettingsStorageServiceImpl"/>
         <!--项目服务-->
-        <projectService serviceImplementation="com.sjhy.plugin.service.impl.TableInfoSettingsServiceImpl"/>
-        <projectService serviceInterface="com.sjhy.plugin.service.CodeGenerateService" serviceImplementation="com.sjhy.plugin.service.impl.CodeGenerateServiceImpl"/>
+        <projectService serviceImplementation="com.bruce.plugin.service.impl.TableInfoSettingsServiceImpl"/>
+        <projectService serviceInterface="com.bruce.plugin.service.CodeGenerateService" serviceImplementation="com.bruce.plugin.service.impl.CodeGenerateServiceImpl"/>
         <!--系统设置面板-->
-        <applicationConfigurable dynamic="true" instance="com.sjhy.plugin.ui.MainSettingForm"/>
+        <applicationConfigurable dynamic="true" instance="com.bruce.plugin.ui.MainSettingForm"/>
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
-        <group id="con.sjhy.easyCodeMybatisCodeHelper.action" class="com.sjhy.plugin.actions.MainActionGroup" text="EasyCodeMybatisCodeHelper"
+        <group id="con.sjhy.easyCodeMybatisCodeHelper.action" class="com.bruce.plugin.actions.MainActionGroup" text="EasyCodeMybatisCodeHelper"
                popup="true">
             <!--生成代码菜单-->
             <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>

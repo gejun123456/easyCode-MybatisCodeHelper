@@ -2,8 +2,8 @@
 
     <actions>
         <!-- 实体类生成代码 -->
-        <action id="com.sjhy.plugin.actions.EasyCodeMybatisCodeHelperEntityAction"
-                class="com.sjhy.plugin.actions.EasyCodeEntityAction" text="EasyCodeMybatisCodeHelper...">
+        <action id="com.bruce.plugin.actions.EasyCodeMybatisCodeHelperEntityAction"
+                class="com.bruce.plugin.actions.EasyCodeEntityAction" text="EasyCodeMybatisCodeHelper...">
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>

@@ -1,4 +1,5 @@
 ##following code can be generated use MybatisCodeHelperPro plugin mybatis generator mingrate to template generate.
+##copy group for different project.
 #set($javamodelSrcFolder="${projectPath}/src/main/java")
 #set($modelPackageName="com.model")
 #set($mapperSrcFolder="${projectPath}/src/main/java")
@@ -15,4 +16,5 @@
 #set($useSwagger=true)
 #set($useOpenApi=true)
 #set($addSchemaName=false)
-#set($mapperSuffix="Dao")
+#set($mapperSuffix="Mapper")
+#set($daoSuffix="Mapper")

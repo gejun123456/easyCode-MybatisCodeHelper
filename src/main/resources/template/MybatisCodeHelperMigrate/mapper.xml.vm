@@ -7,6 +7,8 @@ $!{mybatisCodehelper.vm}
 $!callback.setSavePath($XmlSavePath)
 $!callback.setFileName($tool.append($!{tableInfo.name}, $!{mapperSuffix},".xml"))
 
+#set($daoName = $tool.append($tableInfo.name, ${daoSuffix}))
+
 
     ##拿到主键
 #if(!$tableInfo.pkColumn.isEmpty())
@@ -15,7 +17,7 @@ $!callback.setFileName($tool.append($!{tableInfo.name}, $!{mapperSuffix},".xml")
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="$!{tableInfo.savePackageName}.dao.$!{tableInfo.name}Dao">
+<mapper namespace="${mapperPackageName}.${daoName}">
 
     <resultMap id="BaseResultMap" type="$!{modelPackageName}.$!{tableInfo.name}">
         <!--@Table $!{tableInfo.obj.name}-->

@@ -1,6 +1,6 @@
 ##定义初始变量
 $!{mybatisCodehelper.vm}
-#set($daoName = $tool.append($tableInfo.name, "Dao"))
+#set($daoName = $tool.append($tableInfo.name, ${daoSuffix}))
 ##设置回调
 #set($daoSavePath = $tool.append(${mapperSrcFolder},"/",${mapperPackageName.replace(".","/")}))
 

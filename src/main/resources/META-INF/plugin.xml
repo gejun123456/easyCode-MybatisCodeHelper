@@ -28,10 +28,14 @@
         <ul>
             <li>1.Fix conflict with easyCode plugin</li>
             <li>2.Add MybatisCodeHelperMigrate templates</li>
+            <li>3.Add debug table action ect</li>
+            <li>4.better error text</li>
         </ul>
         <ul>
             <li>1.修复与easyCode插件冲突问题</li>
             <li>2.添加MybatisCodeHelperMigrate模板</li>
+            <li>3.添加debug表action</li>
+            <li>4.更好的报错</li>
         </ul>
       <p>1.2.7-java.RELEASE</p>
       <ul>
@@ -266,7 +270,7 @@
     ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="193"/>
+    <idea-version since-build="191"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->

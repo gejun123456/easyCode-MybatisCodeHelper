@@ -283,11 +283,6 @@
     <depends>com.intellij.database</depends>
     <depends optional="true" config-file="easycode-java.xml">com.intellij.modules.java</depends>
 
-    <application-components>
-        <!--<component>-->
-            <!--<implementation-class>com.sjhy.plugin.tool.CloneUtils</implementation-class>-->
-        <!--</component>-->
-    </application-components>
 
     <!--扩展点-->
     <extensions defaultExtensionNs="com.intellij">

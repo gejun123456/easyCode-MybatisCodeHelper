@@ -74,4 +74,4 @@
 > 3. 不要解压zip包，安装时直接选zip包即可。
 > ```  
 
-#### QQ群：[914051156](https://shang.qq.com/wpa/qunwpa?idkey=4d495321e527ec2ce459c0d0d6320414cd9677d92d5287df831d4e1c4ec09740)
+#### QQ群：[232578741](https://qm.qq.com/cgi-bin/qm/qr?k=iZqcrvEYjf4FKXaLo2LP6oFirrF1DRp6&jump_from=webapi&authKey=s9+7ybDRXHBHBxJy7vR3dwGev5hf0ElauAwVlvz7O0zT31SCr+jyXwZJ2YiMVTB6)

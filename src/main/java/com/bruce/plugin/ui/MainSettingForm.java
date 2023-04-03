@@ -1,6 +1,9 @@
 package com.bruce.plugin.ui;
 
 import com.bruce.plugin.scratch.MyScratchUtils;
+import com.bruce.plugin.tool.ProjectUtils;
+import com.intellij.codeInsight.CodeInsightUtil;
+import com.intellij.ide.scratch.ScratchUtil;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.bruce.plugin.dict.GlobalDict;
@@ -11,12 +14,19 @@ import com.bruce.plugin.service.impl.NetworkExportImportSettingsServiceImpl;
 import com.bruce.plugin.tool.MessageDialogUtils;
 import com.bruce.plugin.tool.StringUtils;
 import com.bruce.plugin.ui.component.ExportImportComponent;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -57,7 +67,8 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
         importclipboardToScrathFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MyScratchUtils.handleImportFromJson();
+                String s = MyScratchUtils.handleImportFromJson();
+                Messages.showInfoMessage("success, go to scratchFile place "+s,"Success");
             }
         });
 

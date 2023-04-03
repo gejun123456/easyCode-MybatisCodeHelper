@@ -24,6 +24,15 @@
 
 
     <change-notes><![CDATA[
+        <p>1.2.9-java.RELEASE</p>
+        <ul>
+            <li>1.兼容2023.1版本</li>
+            <li>2.支持使用scratch文件来生成代码</li>
+        </ul>
+        <ul>
+            <li>1.support 2023.1 version</li>
+            <li>2.support use scratch file to generate code</li>
+        </ul>
         <p>1.2.8-java.RELEASE</p>
         <ul>
             <li>1.Fix conflict with easyCode plugin</li>

@@ -10,6 +10,7 @@ import com.bruce.plugin.tool.JSON;
 import com.bruce.plugin.tool.ProjectUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.ide.extensionResources.ExtensionsRootType;
 import com.intellij.ide.scratch.RootType;
 import com.intellij.ide.scratch.ScratchFileService;
@@ -78,9 +79,9 @@ public final class MyScratchUtils {
 
         Map<String, TypeMapperGroup> typeMapperGroupMap = parse.getTypeMapperGroupMap();
         var5.writeFilesToScratchFile(s1, TYPE_MAPPER_CONFIG, typeMapperGroupMap);
-        Project currProject = ProjectUtils.getCurrProject();
-        VfsUtil.markDirtyAndRefresh(false,true,true,new File(FileUtil.toSystemDependentName(rootPath + "/EasyCode")));
-        return "success";
+        String path = s1;
+        VfsUtil.markDirtyAndRefresh(false,true,true,new File(FileUtil.toSystemDependentName(path)));
+        return s1;
     }
 
     @NotNull

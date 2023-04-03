@@ -98,14 +98,21 @@ public class MainActionGroup extends ActionGroup {
      */
     private AnAction[] getMenuList() {
         String mainActionId = "com.sjhy.easycodeMybatisCodeHelper.action.generate";
+        String generateFromScratchActionId = "com.sjhy.easycodeMybatisCodeHelper.action.generateFromScratchFile";
         String configActionId = "com.sjhy.easycodeMybatisCodeHelper.action.config";
         String debugActionId = "com.sihy.easycodeMybatisCodeHelper.action.debug";
         ActionManager actionManager = ActionManager.getInstance();
         // 代码生成菜单
         AnAction mainAction = actionManager.getAction(mainActionId);
         if (mainAction == null) {
-            mainAction = new MainAction("Generate Code");
+            mainAction = new MainAction("Generate Code(old)");
             actionManager.registerAction(mainActionId, mainAction);
+        }
+
+        AnAction generateFromScratch = actionManager.getAction(generateFromScratchActionId);
+        if (generateFromScratch == null) {
+            generateFromScratch = new GenerateFromScratchFileAction("GenerateFromScratchFile(new)");
+            actionManager.registerAction(generateFromScratchActionId, generateFromScratch);
         }
         // 表配置菜单
         AnAction configAction = actionManager.getAction(configActionId);
@@ -135,7 +142,7 @@ public class MainActionGroup extends ActionGroup {
         };
 
         // 返回所有菜单
-        return new AnAction[]{mainAction, configAction,debugAction, clearConfigAction};
+        return new AnAction[]{mainAction,generateFromScratch,configAction,debugAction, clearConfigAction};
     }
 
 

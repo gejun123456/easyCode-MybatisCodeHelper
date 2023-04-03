@@ -1,5 +1,6 @@
 package com.bruce.plugin.ui;
 
+import com.bruce.plugin.scratch.MyScratchUtils;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.bruce.plugin.dict.GlobalDict;
@@ -14,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Objects;
 
 /**
@@ -37,6 +40,7 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
     private JTextField authorEditor;
     private JLabel userSecureLabel;
     private JLabel userSecureTitle;
+    private JButton importclipboardToScrathFile;
 
     /**
      * 子配置
@@ -50,6 +54,17 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
         new ExportImportComponent(this.exportByFileBtn, this.importByFileBtn, new LocalFileExportImportSettingsServiceImpl(), this::loadChildSettingsStore);
         new ExportImportComponent(this.exportByNetBtn, this.importByNetBtn, new NetworkExportImportSettingsServiceImpl(), this::loadChildSettingsStore);
         new ExportImportComponent(this.exportByClipboardBtn, this.importByClipboardBtn, new ClipboardExportImportSettingsServiceImpl(), this::loadChildSettingsStore);
+        importclipboardToScrathFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MyScratchUtils.handleImportFromJson();
+            }
+        });
+
+    }
+
+    private void handleImport() {
+
     }
 
     private void initEvent() {
@@ -163,4 +178,6 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
             this.pushBtn.setEnabled(true);
         }
     }
+
+
 }

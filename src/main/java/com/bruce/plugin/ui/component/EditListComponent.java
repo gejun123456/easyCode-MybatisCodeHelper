@@ -1,5 +1,6 @@
 package com.bruce.plugin.ui.component;
 
+import com.bruce.plugin.ui.IconUtils;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.ui.Messages;
@@ -100,7 +101,7 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
     }
 
     private AnAction createAddAction() {
-        return new AnAction(AllIcons.General.Add) {
+        return new AnAction(IconUtils.addIcon) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 inputItemName("demo", itemName -> {
@@ -114,7 +115,7 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
     }
 
     private AnAction createRemoveAction() {
-        return new AnAction(AllIcons.General.Remove) {
+        return new AnAction(IconUtils.deleteIcon) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 elementList.removeIf(item -> Objects.equals(item.fileName(), jbList.getSelectedValue()));
@@ -129,7 +130,7 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
     }
 
     private AnAction createMoveUpAction() {
-        return new AnAction(AllIcons.Actions.MoveUp) {
+        return new AnAction(IconUtils.moveUpIcon) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 E selectItem = findByName(currentItem);
@@ -152,7 +153,7 @@ public class EditListComponent<E extends AbstractEditorItem<E>> {
     }
 
     private AnAction createMoveDownAction() {
-        return new AnAction(AllIcons.Actions.MoveDown) {
+        return new AnAction(IconUtils.moveDownIcon) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 E selectItem = findByName(currentItem);

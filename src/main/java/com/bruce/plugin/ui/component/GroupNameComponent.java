@@ -1,5 +1,6 @@
 package com.bruce.plugin.ui.component;
 
+import com.bruce.plugin.ui.IconUtils;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.ui.ComboBox;
@@ -10,6 +11,7 @@ import com.bruce.plugin.entity.AbstractGroup;
 import com.bruce.plugin.entity.AbstractItem;
 import com.bruce.plugin.tool.StringUtils;
 import com.bruce.plugin.ui.base.InputExistsValidator;
+import com.intellij.util.IconUtil;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -85,7 +87,7 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
     }
 
     private AnAction addAction() {
-        return new AnAction(AllIcons.General.Add) {
+        return new AnAction(IconUtils.addIcon) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 inputGroupName("GroupName", groupName -> {
@@ -103,7 +105,7 @@ public class GroupNameComponent<E extends AbstractItem<E>, T extends AbstractGro
     }
 
     private AnAction removeAction() {
-        return new AnAction(AllIcons.General.Remove) {
+        return new AnAction(IconUtils.deleteIcon) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 groupMap.remove(currGroupName);

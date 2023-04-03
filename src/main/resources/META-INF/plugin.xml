@@ -270,7 +270,7 @@
     ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="191"/>
+    <idea-version since-build="192"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -282,18 +282,21 @@
     <!--必须依赖Database Tool插件-->
     <depends>com.intellij.database</depends>
     <depends optional="true" config-file="easycode-java.xml">com.intellij.modules.java</depends>
+    <depends optional="true" config-file="plugin_vtl.xml">com.intellij.velocity</depends>
 
 
     <!--扩展点-->
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <!--实例化配置信息服务-->
+        <editorNotificationProvider implementation="com.bruce.plugin.scratch.EasyCodeEditorNotificationProvider"/>
         <applicationService serviceImplementation="com.bruce.plugin.service.impl.SettingsStorageServiceImpl"/>
         <!--项目服务-->
         <projectService serviceImplementation="com.bruce.plugin.service.impl.TableInfoSettingsServiceImpl"/>
         <projectService serviceInterface="com.bruce.plugin.service.CodeGenerateService" serviceImplementation="com.bruce.plugin.service.impl.CodeGenerateServiceImpl"/>
         <!--系统设置面板-->
         <applicationConfigurable dynamic="true" instance="com.bruce.plugin.ui.MainSettingForm"/>
+        <completion.contributor implementationClass="com.bruce.plugin.scratch.GroupJsonCompletionContributor" language="JSON"/>
     </extensions>
 
     <actions>

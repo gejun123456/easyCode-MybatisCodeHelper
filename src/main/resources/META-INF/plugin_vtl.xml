@@ -1,0 +1,7 @@
+<idea-plugin>
+
+
+    <extensions defaultExtensionNs="com.intellij.velocity">
+<!--        <globalVariableProvider implementation="com.bruce.plugin.velocity.MybatisCodeHelperVariableContributor"/>-->
+    </extensions>
+</idea-plugin>

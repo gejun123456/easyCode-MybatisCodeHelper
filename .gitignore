@@ -11,3 +11,4 @@ gradle.properties
 out/
 build/
 idea-sandbox
+jvmargs.txt

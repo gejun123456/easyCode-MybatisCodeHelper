@@ -4,6 +4,7 @@ import com.bruce.plugin.scratch.MyScratchUtils;
 import com.bruce.plugin.tool.ProjectUtils;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.ide.scratch.ScratchUtil;
+import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.bruce.plugin.dict.GlobalDict;
@@ -24,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -67,7 +69,8 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
         importclipboardToScrathFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String s = MyScratchUtils.handleImportFromJson();
+                String contents = (String) CopyPasteManager.getInstance().getContents(DataFlavor.stringFlavor);
+                String s = MyScratchUtils.handleImportFromJson(contents);
                 Messages.showInfoMessage("success, go to scratchFile place "+s,"Success");
             }
         });

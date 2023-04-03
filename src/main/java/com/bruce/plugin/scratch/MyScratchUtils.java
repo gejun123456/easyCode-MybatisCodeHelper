@@ -7,10 +7,8 @@ import com.bruce.plugin.enums.ColumnConfigType;
 import com.bruce.plugin.service.SettingsStorageService;
 import com.bruce.plugin.tool.CurrGroupUtils;
 import com.bruce.plugin.tool.JSON;
-import com.bruce.plugin.tool.ProjectUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.ide.extensionResources.ExtensionsRootType;
 import com.intellij.ide.scratch.RootType;
 import com.intellij.ide.scratch.ScratchFileService;
@@ -18,7 +16,10 @@ import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.containers.ContainerUtil;
 import kotlin.jvm.JvmStatic;
 import kotlin.text.Charsets;
 import org.apache.commons.compress.utils.Lists;
@@ -28,10 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.datatransfer.DataFlavor;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 public final class MyScratchUtils {
@@ -50,8 +48,7 @@ public final class MyScratchUtils {
 
     @JvmStatic
     @NotNull
-    public static final String handleImportFromJson() {
-        String json = (String) CopyPasteManager.getInstance().getContents(DataFlavor.stringFlavor);
+    public static final String handleImportFromJson(String json) {
         SettingsStorageDTO parse = (SettingsStorageDTO) JSON.parse(json, SettingsStorageDTO.class);
         String var10000 = ScratchFileService.getInstance().getRootPath((RootType) ExtensionsRootType.getInstance());
         String rootPath = var10000;
@@ -80,8 +77,17 @@ public final class MyScratchUtils {
         Map<String, TypeMapperGroup> typeMapperGroupMap = parse.getTypeMapperGroupMap();
         var5.writeFilesToScratchFile(s1, TYPE_MAPPER_CONFIG, typeMapperGroupMap);
         String path = s1;
-        VfsUtil.markDirtyAndRefresh(false,true,true,new File(FileUtil.toSystemDependentName(path)));
+        markDirtyAndRefresh(false,true,true,new File(FileUtil.toSystemDependentName(path)));
         return s1;
+    }
+
+
+    public static void markDirtyAndRefresh(boolean async, boolean recursive, boolean reloadChildren, @NotNull File... files) {
+
+        LocalFileSystem fileSystem = LocalFileSystem.getInstance();
+        Objects.requireNonNull(fileSystem);
+        VirtualFile[] virtualFiles = (VirtualFile[]) ContainerUtil.map(files, fileSystem::refreshAndFindFileByIoFile, new VirtualFile[files.length]);
+        VfsUtil.markDirtyAndRefresh(async, recursive, reloadChildren, virtualFiles);
     }
 
     @NotNull

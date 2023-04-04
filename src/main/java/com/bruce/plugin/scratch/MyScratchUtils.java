@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import com.intellij.ide.extensionResources.ExtensionsRootType;
 import com.intellij.ide.scratch.RootType;
 import com.intellij.ide.scratch.ScratchFileService;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
@@ -49,6 +50,7 @@ public final class MyScratchUtils {
     @JvmStatic
     @NotNull
     public static final String handleImportFromJson(String json) {
+        FileDocumentManager.getInstance().saveAllDocuments();
         SettingsStorageDTO parse = (SettingsStorageDTO) JSON.parse(json, SettingsStorageDTO.class);
         String var10000 = ScratchFileService.getInstance().getRootPath((RootType) ExtensionsRootType.getInstance());
         String rootPath = var10000;
@@ -58,15 +60,6 @@ public final class MyScratchUtils {
         //get sub directory
         String easycodesub = EASYCODESUB;
         String s1 = rootPath + "/" + easycodesub;
-        File file = new File(FileUtil.toSystemDependentName(s1));
-        Integer count = 1;
-        String qqq = s1;
-        while(file.exists()){
-            qqq = s1+"_"+count.toString();
-            file = new File(FileUtil.toSystemDependentName(qqq));
-            count++;
-        }
-        s1 = qqq;
         var5.writeFilesToScratchFile(s1, s, templateGroupMap);
         Map<String, GlobalConfigGroup> globalConfigGroupMap = parse.getGlobalConfigGroupMap();
         var5.writeFilesToScratchFile(s1, GLOBAL_CONFIG, globalConfigGroupMap);
@@ -79,6 +72,43 @@ public final class MyScratchUtils {
         String path = s1;
         markDirtyAndRefresh(false,true,true,new File(FileUtil.toSystemDependentName(path)));
         return s1;
+    }
+
+    @NotNull
+    private static String getNewNameIfFileExist(String s1) {
+        File file = new File(FileUtil.toSystemDependentName(s1));
+        Integer count = 1;
+        String qqq = s1;
+        while(file.exists()){
+            qqq = s1 + "_" + count.toString();
+            file = new File(FileUtil.toSystemDependentName(qqq));
+            count++;
+        }
+        return qqq;
+    }
+
+
+    @NotNull
+    private static String getNewNameIfFileExistWhenFileChild(File file1,String s1) {
+        String suffix = ".json";
+        boolean hasSuffix = false;
+        if(s1.endsWith(suffix)){
+            s1 = s1.substring(0,s1.length()-suffix.length());
+            hasSuffix = true;
+        }
+        File file = new File(file1,s1);
+        Integer count = 1;
+        String qqq = s1;
+        while(file.exists()){
+            qqq = s1 + "_" + count.toString();
+            file = new File(FileUtil.toSystemDependentName(qqq));
+            count++;
+        }
+
+        if(hasSuffix){
+            qqq = qqq + suffix;
+        }
+        return qqq;
     }
 
 
@@ -228,7 +258,7 @@ public final class MyScratchUtils {
                     TypeMapperGroup typeMapper = (TypeMapperGroup) u;
                     String name1 = typeMapper.getName();
                     List<TypeMapper> elementList1 = typeMapper.getElementList();
-                    File file2 = new File(file1, name1);
+
                     StringBuilder builder = new StringBuilder();
 //                    for (TypeMapper mapper : elementList1) {
 //                        MatchType matchType = mapper.getMatchType();
@@ -237,7 +267,8 @@ public final class MyScratchUtils {
 //
 //                    }
                     String s1 = new Gson().toJson(elementList1);
-                    writeContentTofile(file1, name1+".json", s1);
+                    String newNameIfFileExistWhenFileChild = getNewNameIfFileExistWhenFileChild(file1, name1 + ".json");
+                    writeContentTofile(file1, newNameIfFileExistWhenFileChild, s1);
                 } else if (u instanceof ColumnConfigGroup) {
                     ColumnConfigGroup columnConfigGroup = (ColumnConfigGroup) u;
                     String name1 = columnConfigGroup.getName();
@@ -251,12 +282,14 @@ public final class MyScratchUtils {
                         builder.append("type=" + type.toString() + " title=" + title + " " + "selectValue=" + selectValue + "\n");
                     }
                     String s1 = new Gson().toJson(elementList1);
-                    writeContentTofile(file1, name1+".json", s1);
+
+                    String newNameIfFileExistWhenFileChild = getNewNameIfFileExistWhenFileChild(file1, name1 + ".json");
+                    writeContentTofile(file1, newNameIfFileExistWhenFileChild, s1);
                 } else {
-                    File file = new File(file1, t);
+                    String newNameIfFileExistWhenFileChild = getNewNameIfFileExistWhenFileChild(file1, t);
+                    File file = new File(file1, newNameIfFileExistWhenFileChild);
                     Iterator var7 = elementList.iterator();
                     while (var7.hasNext()) {
-
                         Object next = var7.next();
                         if (next instanceof Template) {
                             Template template = (Template) next;

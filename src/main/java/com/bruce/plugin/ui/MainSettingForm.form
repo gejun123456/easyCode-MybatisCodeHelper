@@ -21,7 +21,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="当前版本："/>
+              <text resource-bundle="string" key="version"/>
             </properties>
           </component>
           <component id="e7dac" class="javax.swing.JLabel">
@@ -29,7 +29,7 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="作者名称："/>
+              <text resource-bundle="string" key="authorName"/>
             </properties>
           </component>
           <component id="584c" class="javax.swing.JLabel" binding="versionLabel">
@@ -116,7 +116,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="重置默认设置"/>
+                  <text resource-bundle="string" key="resetDefaultsetting"/>
                 </properties>
               </component>
               <grid id="8e29" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="2" vgap="1">
@@ -164,7 +164,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="导出至云端"/>
+              <text resource-bundle="string" key="exportToNetWork"/>
             </properties>
           </component>
           <component id="b2c2" class="javax.swing.JButton" binding="importByNetBtn">
@@ -172,7 +172,7 @@
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="从云端导入"/>
+              <text resource-bundle="string" key="exportFromNetwork"/>
             </properties>
           </component>
           <component id="480b5" class="javax.swing.JButton" binding="exportByFileBtn">
@@ -180,7 +180,7 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="导出至本地"/>
+              <text resource-bundle="string" key="exportToLocalFile"/>
             </properties>
           </component>
           <component id="b3eb0" class="javax.swing.JButton" binding="importByFileBtn">
@@ -188,7 +188,7 @@
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="从本地导入"/>
+              <text resource-bundle="string" key="importFromLocalFile"/>
             </properties>
           </component>
           <component id="275bf" class="javax.swing.JButton" binding="exportByClipboardBtn">
@@ -196,7 +196,7 @@
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="导出至剪切板"/>
+              <text resource-bundle="string" key="exportToClipBoard"/>
             </properties>
           </component>
           <component id="4a868" class="javax.swing.JButton" binding="importByClipboardBtn">
@@ -204,7 +204,7 @@
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="从剪切板导入"/>
+              <text resource-bundle="string" key="importFromClipBoard"/>
             </properties>
           </component>
           <hspacer id="18803">
@@ -217,7 +217,7 @@
               <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="剪切板导入到scratch文件"/>
+              <text resource-bundle="string" key="clipboardToScratch"/>
             </properties>
           </component>
           <component id="f942e" class="javax.swing.JButton" binding="fromJsonToScratch">
@@ -225,7 +225,7 @@
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="从json文件导入到scratch文件"/>
+              <text resource-bundle="string" key="localFileJsonToScratchFile"/>
             </properties>
           </component>
         </children>

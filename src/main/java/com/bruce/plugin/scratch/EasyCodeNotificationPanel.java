@@ -136,6 +136,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
             refreshGroupButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    FileDocumentManager.getInstance().saveAllDocuments();
                     loadGroups(project, groupComboBox,true);
                 }
             });
@@ -301,7 +302,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
     }
 
     private void loadGroups(@NotNull Project project, ComboBox<GroupInfo> groupComboBox,boolean showErorr) {
-        FileDocumentManager.getInstance().saveAllDocuments();
+
         String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile();
         File file = new File(easyCodeGroupFile);
         if (!file.exists()) {
@@ -326,6 +327,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
             for (GroupInfo groupInfo : o) {
                 groupComboBox.addItem(groupInfo);
             }
+            //todo get the group with template name make it first.
         } catch (IOException ex) {
             ex.printStackTrace();
         }

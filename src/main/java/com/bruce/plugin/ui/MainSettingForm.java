@@ -2,8 +2,9 @@ package com.bruce.plugin.ui;
 
 import com.bruce.plugin.scratch.MyScratchUtils;
 import com.bruce.plugin.tool.ProjectUtils;
-import com.intellij.codeInsight.CodeInsightUtil;
-import com.intellij.ide.scratch.ScratchUtil;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
@@ -15,12 +16,8 @@ import com.bruce.plugin.service.impl.NetworkExportImportSettingsServiceImpl;
 import com.bruce.plugin.tool.MessageDialogUtils;
 import com.bruce.plugin.tool.StringUtils;
 import com.bruce.plugin.ui.component.ExportImportComponent;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +25,6 @@ import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Objects;
 
 /**
@@ -53,6 +49,7 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
     private JLabel userSecureLabel;
     private JLabel userSecureTitle;
     private JButton importclipboardToScrathFile;
+    private JButton fromJsonToScratch;
 
     /**
      * 子配置
@@ -71,6 +68,20 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
             public void actionPerformed(ActionEvent e) {
                 String contents = (String) CopyPasteManager.getInstance().getContents(DataFlavor.stringFlavor);
                 String s = MyScratchUtils.handleImportFromJson(contents);
+                Messages.showInfoMessage("success, go to scratchFile place "+s,"Success");
+            }
+        });
+
+        fromJsonToScratch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VirtualFile virtualFile = FileChooser.chooseFile(FileChooserDescriptorFactory.createSingleFileDescriptor("json"), ProjectUtils.getCurrProject(), null);
+                if (virtualFile == null) {
+                    Messages.showWarningDialog("config file not found！", GlobalDict.TITLE_INFO);
+                    return;
+                }
+                String json = LoadTextUtil.loadText(virtualFile).toString();
+                String s = MyScratchUtils.handleImportFromJson(json);
                 Messages.showInfoMessage("success, go to scratchFile place "+s,"Success");
             }
         });

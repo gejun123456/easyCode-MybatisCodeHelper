@@ -301,6 +301,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
     }
 
     private void loadGroups(@NotNull Project project, ComboBox<GroupInfo> groupComboBox,boolean showErorr) {
+        FileDocumentManager.getInstance().saveAllDocuments();
         String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile();
         File file = new File(easyCodeGroupFile);
         if (!file.exists()) {

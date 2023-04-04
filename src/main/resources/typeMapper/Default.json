@@ -10,6 +10,11 @@
     "javaType": "java.lang.String"
   },
   {
+    "matchType": "ORDINARY",
+    "columnType": "tinyint(1)",
+    "javaType": "java.lang.Boolean"
+  },
+  {
     "matchType": "REGEX",
     "columnType": "(tiny|medium|long)*text",
     "javaType": "java.lang.String"

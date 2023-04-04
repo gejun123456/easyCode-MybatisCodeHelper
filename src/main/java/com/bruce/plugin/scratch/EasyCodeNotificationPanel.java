@@ -1,21 +1,26 @@
 package com.bruce.plugin.scratch;
 
 import com.bruce.plugin.dict.GlobalDict;
+import com.bruce.plugin.dto.ColumnTableData;
 import com.bruce.plugin.dto.GroupInfo;
 import com.bruce.plugin.entity.*;
+import com.bruce.plugin.enums.MatchType;
 import com.bruce.plugin.service.CodeGenerateService;
 import com.bruce.plugin.service.TableInfoSettingsService;
 import com.bruce.plugin.tool.*;
+import com.bruce.plugin.ui.JTableDialog;
 import com.bruce.plugin.ui.base.EditorSettingsInit;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.intellij.codeInsight.CodeInsightUtil;
+import com.intellij.database.model.DasColumn;
 import com.intellij.database.model.DasNamespace;
 import com.intellij.database.model.DasObject;
 import com.intellij.database.model.DasTable;
 import com.intellij.database.psi.DbDataSource;
 import com.intellij.database.psi.DbPsiFacade;
 import com.intellij.database.psi.DbTable;
+import com.intellij.database.util.DasUtil;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -43,6 +48,7 @@ import kotlin.text.Charsets;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,6 +62,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * @author bruce ge 2023/3/28
@@ -208,6 +216,83 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
                     dialogBuilder.show();
                 }
             });
+        } else if(path.startsWith(MyScratchUtils.getEasyCodeSubDirectory(MyScratchUtils.TYPE_MAPPER_CONFIG))){
+            JLabel label = new JLabel("choose table:");
+            myLinksPanel.add(label);
+            ComboBox<String> tableCombox = new ComboBox<>();
+
+            Map<String, DasTable> allTables = findAllTablesInProject(project);
+            tableCombox.removeAllItems();
+            for (String tableName : getAllTableNameBySort(allTables)) {
+                tableCombox.addItem(tableName);
+            }
+            DbTable selectDbTable = CacheDataUtils.getInstance().getSelectDbTable();
+            if(selectDbTable!=null&&allTables.containsKey(selectDbTable.toString())){
+                tableCombox.setSelectedItem(selectDbTable.toString());
+            }
+            myLinksPanel.add(tableCombox);
+
+            JButton debugButton = new JButton("DEBUG");
+            myLinksPanel.add(debugButton);
+            debugButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    DbTable selectedDbTable = getSelectedDbTable(tableCombox, project);
+                    if(selectedDbTable==null){
+                        Messages.showErrorDialog(project, "table is not choosed", "error");
+                        return;
+                    }
+                    CacheDataUtils.getInstance().setSelectDbTable(selectedDbTable);
+                    final JBIterable<? extends DasColumn> columns = DasUtil.getColumns(selectedDbTable);
+                    StringBuilder result = new StringBuilder();
+                    List<ColumnTableData> lists = com.google.common.collect.Lists.newArrayList();
+
+                    FileDocumentManager.getInstance().saveAllDocuments();
+
+                    VirtualFile file = fileEditor.getFile();
+                    PsiFile file1 = PsiManager.getInstance(project).findFile(file);
+                    String text = file1.getText();
+                    List<TypeMapper> typeMapperList = new Gson().fromJson(text, new TypeToken<List<TypeMapper>>() {
+                    }.getType());
+                    Set<String> errorCount = new HashSet<>();
+                    for (DasColumn column : columns) {
+//                    result.append("Column name is:" + column.getName() + "\t");
+//                    result.append("Column type is:" + column.getDataType().getSpecification() + "\t");
+//                    result.append("Java type is:" + TypeUtils.getColumnType(column.getDataType().getSpecification()));
+//                    result.append("\n");
+                        final ColumnTableData data = new ColumnTableData();
+                        data.setColumnName(column.getName());
+                        String typeName = column.getDataType().getSpecification();
+                        data.setColumnType(typeName);
+                        for (TypeMapper typeMapper : typeMapperList) {
+                            try {
+                                if (typeMapper.getMatchType() == MatchType.ORDINARY) {
+                                    if (typeName.equalsIgnoreCase(typeMapper.getColumnType())) {
+                                        data.setJavaType(typeMapper.getJavaType());
+                                        break;
+                                    }
+                                } else {
+                                    // 不区分大小写的正则匹配模式
+                                    if (Pattern.compile(typeMapper.getColumnType(), Pattern.CASE_INSENSITIVE).matcher(typeName).matches()) {
+                                        data.setJavaType(typeMapper.getJavaType());
+                                        break;
+                                    }
+                                }
+                            } catch (PatternSyntaxException ee) {
+                                if (!errorCount.contains(typeMapper.getColumnType())) {
+                                    Messages.showWarningDialog(
+                                            "类型映射《" + typeMapper.getColumnType() + "》存在语法错误，请及时修正。报错信息:" + ee.getMessage(),
+                                            GlobalDict.TITLE_INFO);
+                                    errorCount.add(typeMapper.getColumnType());
+                                }
+                            }
+                        }
+                        lists.add(data);
+                    }
+                    JTableDialog dialog = new JTableDialog(lists);
+                    dialog.showAndGet();
+                }
+            });
         }
 
         //get project button.
@@ -260,28 +345,10 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
     private void runDebug(ComboBox comboBox, String code, Project project
             , String fileName) {
         // 获取选中的表
-        String name = (String) comboBox.getSelectedItem();
-        Map<String, DasTable> allTables = findAllTablesInProject(project);
-        DasTable dasTable = allTables.get(name);
-        if (dasTable == null) {
+        DbTable dbTable = getSelectedDbTable(comboBox, project);
+        if (dbTable == null) return;
+        if(dbTable==null){
             return;
-        }
-        DbTable dbTable = null;
-        if (dasTable instanceof DbTable) {
-            // 针对2017.2版本做兼容
-            dbTable = (DbTable) dasTable;
-        } else {
-            Method method = ReflectionUtil.getMethod(DbPsiFacade.class, "findElement", DasObject.class);
-            if (method == null) {
-                Messages.showWarningDialog("findElement method not found", GlobalDict.TITLE_INFO);
-                return;
-            }
-            try {
-                // 针对2017.2以上版本做兼容
-                dbTable = (DbTable) method.invoke(DbPsiFacade.getInstance(project), dasTable);
-            } catch (IllegalAccessException | InvocationTargetException e1) {
-                ExceptionUtil.rethrow(e1);
-            }
         }
         CacheDataUtils.getInstance().setSelectDbTable(dbTable);
         // 获取表信息
@@ -345,6 +412,35 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
             });
             dialogBuilder.show();
         }
+    }
+
+    @Nullable
+    private DbTable getSelectedDbTable(ComboBox comboBox, Project project) {
+        String name = (String) comboBox.getSelectedItem();
+        Map<String, DasTable> allTables = findAllTablesInProject(project);
+        DasTable dasTable = allTables.get(name);
+        DbTable dbTable = null;
+        if (dasTable == null) {
+            dbTable = null;
+        } else {
+            if (dasTable instanceof DbTable) {
+                // 针对2017.2版本做兼容
+                dbTable = (DbTable) dasTable;
+            } else {
+                Method method = ReflectionUtil.getMethod(DbPsiFacade.class, "findElement", DasObject.class);
+                if (method == null) {
+                    Messages.showWarningDialog("findElement method not found", GlobalDict.TITLE_INFO);
+                    return null;
+                }
+                try {
+                    // 针对2017.2以上版本做兼容
+                    dbTable = (DbTable) method.invoke(DbPsiFacade.getInstance(project), dasTable);
+                } catch (IllegalAccessException | InvocationTargetException e1) {
+                    ExceptionUtil.rethrow(e1);
+                }
+            }
+        }
+        return dbTable;
     }
 
     private JBIterable<DasTable> getTables(DbDataSource dataSource) {

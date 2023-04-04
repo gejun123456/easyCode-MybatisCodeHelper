@@ -2,6 +2,7 @@ package com.bruce.plugin.ui;
 
 import com.bruce.plugin.scratch.MyScratchUtils;
 import com.bruce.plugin.tool.ProjectUtils;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
@@ -50,6 +51,7 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
     private JLabel userSecureTitle;
     private JButton importclipboardToScrathFile;
     private JButton fromJsonToScratch;
+    private JButton howScratchFileGenerateButton;
 
     /**
      * 子配置
@@ -83,6 +85,13 @@ public class MainSettingForm implements Configurable, Configurable.Composite, Ba
                 String json = LoadTextUtil.loadText(virtualFile).toString();
                 String s = MyScratchUtils.handleImportFromJson(json);
                 Messages.showInfoMessage("success, go to scratchFile place "+s,"Success");
+            }
+        });
+
+        howScratchFileGenerateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BrowserUtil.browse("https://github.com/gejun123456/EasyCodeMybatisCodeHelperTemplates");
             }
         });
 

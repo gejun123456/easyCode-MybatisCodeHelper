@@ -114,7 +114,6 @@ public final class MyScratchUtils {
 
 
     public static void markDirtyAndRefresh(boolean async, boolean recursive, boolean reloadChildren, @NotNull File... files) {
-
         LocalFileSystem fileSystem = LocalFileSystem.getInstance();
         Objects.requireNonNull(fileSystem);
         VirtualFile[] virtualFiles = (VirtualFile[]) ContainerUtil.map(files, fileSystem::refreshAndFindFileByIoFile, new VirtualFile[files.length]);

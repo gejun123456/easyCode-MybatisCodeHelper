@@ -3,6 +3,7 @@ package com.bruce.plugin.actions;
 import com.bruce.plugin.dict.GlobalDict;
 import com.bruce.plugin.entity.TypeMapper;
 import com.bruce.plugin.enums.MatchType;
+import com.bruce.plugin.scratch.MyScratchUtils;
 import com.bruce.plugin.tool.CacheDataUtils;
 import com.bruce.plugin.tool.CurrGroupUtils;
 import com.bruce.plugin.tool.StringUtils;
@@ -11,6 +12,7 @@ import com.bruce.plugin.ui.SelectSavePath;
 import com.intellij.database.model.DasColumn;
 import com.intellij.database.psi.DbTable;
 import com.intellij.database.util.DasUtil;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -18,6 +20,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.util.containers.JBIterable;
 import com.intellij.util.ui.JBUI;
@@ -26,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,7 +69,33 @@ public class GenerateFromScratchFileAction extends AnAction {
 //            return;
 //        }
         //开始处理
-        new GenerateFromScratchFileUi(event.getProject()).show();
+        List<String> easyCodeDirectoryList = MyScratchUtils.getEasyCodeDirectoryList(project);
+        boolean s = checkIfFileExist(easyCodeDirectoryList);
+        if(!s){
+            int i = Messages.showOkCancelDialog("Go To WebSite to see example", "EasyCode Template file not found",
+                    "Ok","Cancel",null);
+            if(i==Messages.OK) {
+                String s1 = easyCodeDirectoryList.get(0);
+                File file = new File(s1);
+                if(!file.exists()){
+                    file.mkdirs();
+                    MyScratchUtils.markDirtyAndRefresh(false,false,true,file);
+                }
+                BrowserUtil.browse("https://github.com/gejun123456/EasyCodeMybatisCodeHelperTemplates");
+            }
+        } else {
+            new GenerateFromScratchFileUi(event.getProject()).show();
+        }
+    }
+
+    private boolean checkIfFileExist(List<String> easyCodeDirectoryList) {
+        boolean s = false;
+        for (String palce : easyCodeDirectoryList) {
+            if(new File(palce).exists()){
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -78,15 +78,15 @@ public class AddDependencyPanel extends EditorNotificationPanel {
         setText("easy code files");
 
         String path = virtualFile.getPath();
-        String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeTemplateDirectory();
-        if (path.startsWith(easyCodeTemplateDirectory)) {
-            createActionLabel("add dependency", new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("hello world");
-                }
-            });
-        }
+//        String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeTemplateDirectory();
+//        if (path.startsWith(easyCodeTemplateDirectory)) {
+//            createActionLabel("add dependency", new Runnable() {
+//                @Override
+//                public void run() {
+//                    System.out.println("hello world");
+//                }
+//            });
+//        }
     }
 
 

@@ -22,10 +22,10 @@ public class AddDependencyNotificationProvider extends EditorNotifications.Provi
     public @Nullable AddDependencyPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor, @NotNull Project project) {
         //check if virtual file in under easyCode scratch folder.
         String path = file.getPath();
-        String easyCodePath = MyScratchUtils.getEasyCodeDirectory();
-        if(path.startsWith(easyCodePath)){
-            return new AddDependencyPanel(file,fileEditor,project);
-        }
+//        String easyCodePath = MyScratchUtils.getEasyCodeDirectory();
+//        if(path.startsWith(easyCodePath)){
+//            return new AddDependencyPanel(file,fileEditor,project);
+//        }
         return null;
     }
 }

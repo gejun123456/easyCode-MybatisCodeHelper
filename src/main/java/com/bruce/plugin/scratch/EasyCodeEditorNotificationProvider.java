@@ -11,11 +11,14 @@ import com.intellij.ui.EditorNotifications;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * @author bruce ge 2023/3/28
  */
 public class EasyCodeEditorNotificationProvider extends EditorNotifications.Provider<EasyCodeNotificationPanel> implements DumbAware {
     private static final Key<EasyCodeNotificationPanel> KEY = Key.create("easycode.mybatiscodehelper.notificationPanel");
+
     @Override
     public @NotNull Key<EasyCodeNotificationPanel> getKey() {
         return KEY;
@@ -25,10 +28,11 @@ public class EasyCodeEditorNotificationProvider extends EditorNotifications.Prov
     public @Nullable EasyCodeNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor, @NotNull Project project) {
         //check if virtual file in under easyCode scratch folder.
         String path = file.getPath();
-        String easyCodePath = MyScratchUtils.getEasyCodeDirectory();
-        if(path.startsWith(easyCodePath)){
-            return new EasyCodeNotificationPanel(file,fileEditor,project);
+        String currentBaseDir = MyScratchUtils.getCurrentBaseDir(project, file);
+        if (currentBaseDir != null) {
+            return new EasyCodeNotificationPanel(file, fileEditor, project);
         }
+
         return null;
     }
 

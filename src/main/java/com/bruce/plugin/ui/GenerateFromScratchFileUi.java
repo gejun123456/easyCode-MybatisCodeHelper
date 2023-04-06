@@ -169,11 +169,12 @@ public class GenerateFromScratchFileUi extends DialogWrapper {
         setFolderAndPackageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String easyCodeDirectory = MyScratchUtils.getEasyCodeDirectory();
-                String easyCodeSubDirectory = MyScratchUtils.getEasyCodeSubDirectory(MyScratchUtils.GLOBAL_CONFIG);
+                List<String> easyCodeDirectory = MyScratchUtils.getEasyCodeDirectoryList(project);
+                String s1 = easyCodeDirectory.get(0);
+                String easyCodeSubDirectory = MyScratchUtils.getEasyCodeSubDirectory(s1, MyScratchUtils.GLOBAL_CONFIG);
                 String s = easyCodeSubDirectory + "/" + "MybatisCodeHelperPro" + "/mybatisCodehelper.vm";
                 //todo should check if file exist. just do it.
-                Messages.showInfoMessage(project,"Edit file","edit file in path:"+s);
+                Messages.showInfoMessage(project, "Edit file", "edit file in path:" + s);
             }
         });
     }
@@ -242,7 +243,7 @@ public class GenerateFromScratchFileUi extends DialogWrapper {
     private void refreshData() {
         // 获取选中的表信息（鼠标右键的那张表），并提示未知类型
         TableInfo tableInfo;
-        if(entityMode) {
+        if (entityMode) {
             tableInfo = tableInfoService.getTableInfo(cacheDataUtils.getSelectPsiClass());
         } else {
             tableInfo = tableInfoService.getTableInfo(cacheDataUtils.getSelectDbTable());
@@ -289,8 +290,10 @@ public class GenerateFromScratchFileUi extends DialogWrapper {
     private void onOK() {
         List<Template> selectTemplateList = groupSelectComponent.getAllSelectedTemplate();
         String selectedGroup = groupSelectComponent.getSelectedGroup();
-
-        if(MyScratchUtils.setDefaultForGroups(selectedGroup,project)){
+        String easyCodeBasePath = groupSelectComponent.getEasyCodeBasePath();
+//        List<String> easyCodeDirectoryList = MyScratchUtils.getEasyCodeDirectoryList(project);
+//        String s = easyCodeDirectoryList.get(0);
+        if (MyScratchUtils.setDefaultForGroups(easyCodeBasePath, selectedGroup, project)) {
             return;
         }
 
@@ -319,7 +322,7 @@ public class GenerateFromScratchFileUi extends DialogWrapper {
         }
         // 保存配置
         TableInfo tableInfo;
-        if(!entityMode) {
+        if (!entityMode) {
             tableInfo = tableInfoService.getTableInfo(cacheDataUtils.getSelectDbTable());
         } else {
             tableInfo = tableInfoService.getTableInfo(cacheDataUtils.getSelectPsiClass());
@@ -344,7 +347,7 @@ public class GenerateFromScratchFileUi extends DialogWrapper {
      */
     private void initPanel() {
         // 初始化模板组
-        this.groupSelectComponent = new GroupSelectComponent();
+        this.groupSelectComponent = new GroupSelectComponent(project);
         templatePanel.add(this.groupSelectComponent.getMainPanel(), BorderLayout.CENTER);
 
         //初始化Module选择

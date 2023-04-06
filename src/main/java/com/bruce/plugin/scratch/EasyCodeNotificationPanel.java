@@ -36,7 +36,6 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.ui.EditorNotificationPanel;
@@ -72,9 +71,9 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
     public EasyCodeNotificationPanel(VirtualFile virtualFile, @NotNull FileEditor fileEditor, @NotNull Project project) {
         super();
         setText("easy code files");
-
+        String currentBaseDir = MyScratchUtils.getCurrentBaseDir(project, virtualFile);
         String path = virtualFile.getPath();
-        String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeTemplateDirectory();
+        String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeTemplateDirectory(currentBaseDir);
         if (path.startsWith(easyCodeTemplateDirectory)) {
             createActionLabel("easyCode", new Runnable() {
                 @Override
@@ -85,7 +84,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
             JLabel groupLabel = new JLabel("group:");
             myLinksPanel.add(groupLabel);
             ComboBox<GroupInfo> groupComboBox = new ComboBox<>();
-            loadGroups(project,groupComboBox,false);
+            loadGroups(currentBaseDir,project,groupComboBox,false);
             //read group info from text.
             myLinksPanel.add(groupComboBox);
 
@@ -97,7 +96,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
                 public void actionPerformed(ActionEvent e) {
                     //go to the file.
                     //add group info to the file.
-                    String easyCodeDirectory = MyScratchUtils.getEasyCodeDirectory();
+                    String easyCodeDirectory =currentBaseDir;
                     String s = easyCodeDirectory + "/" + "group.json";
                     File file = new File(s);
                     if (file.exists()) {
@@ -137,7 +136,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     FileDocumentManager.getInstance().saveAllDocuments();
-                    loadGroups(project, groupComboBox,true);
+                    loadGroups(currentBaseDir, project, groupComboBox,true);
                 }
             });
 
@@ -174,13 +173,13 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
                     GroupInfo selected = (GroupInfo) selectedItem;
                     //should get latest group for it.
                     String groupName = selected.getGroupName();
-                    if (MyScratchUtils.setDefaultForGroups(groupName, project)) return;
+                    if (MyScratchUtils.setDefaultForGroups(currentBaseDir,groupName, project)) return;
                     runDebug(tableCombox, text,project,file1.getName());
                     //set those two for it.
                 }
             });
             myLinksPanel.add(debugButton);
-        } else if (path.equals(MyScratchUtils.getEasyCodeGroupFile())) {
+        } else if (path.equals(MyScratchUtils.getEasyCodeGroupFile(currentBaseDir))) {
             createActionLabel("group example", new Runnable() {
                 @Override
                 public void run() {
@@ -217,7 +216,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
                     dialogBuilder.show();
                 }
             });
-        } else if(path.startsWith(MyScratchUtils.getEasyCodeSubDirectory(MyScratchUtils.TYPE_MAPPER_CONFIG))){
+        } else if(path.startsWith(MyScratchUtils.getEasyCodeSubDirectory(currentBaseDir,MyScratchUtils.TYPE_MAPPER_CONFIG))){
             JLabel label = new JLabel("choose table:");
             myLinksPanel.add(label);
             ComboBox<String> tableCombox = new ComboBox<>();
@@ -301,9 +300,9 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
 
     }
 
-    private void loadGroups(@NotNull Project project, ComboBox<GroupInfo> groupComboBox,boolean showErorr) {
+    private void loadGroups(String currentBaseDir, @NotNull Project project, ComboBox<GroupInfo> groupComboBox, boolean showErorr) {
 
-        String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile();
+        String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile(currentBaseDir);
         File file = new File(easyCodeGroupFile);
         if (!file.exists()) {
             if(showErorr) {

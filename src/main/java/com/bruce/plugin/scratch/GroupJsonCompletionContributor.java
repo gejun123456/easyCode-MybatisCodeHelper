@@ -29,8 +29,10 @@ public class GroupJsonCompletionContributor extends CompletionContributor {
         PsiFile originalFile = parameters.getOriginalFile();
         VirtualFile virtualFile = originalFile.getVirtualFile();
         if(virtualFile!=null){
+
             String path = virtualFile.getPath();
-            if(path.equals(MyScratchUtils.getEasyCodeGroupFile())){
+            String currentBaseDir = MyScratchUtils.getCurrentBaseDir(originalFile.getProject(), virtualFile);
+            if(currentBaseDir!=null&&path.equals(MyScratchUtils.getEasyCodeGroupFile(currentBaseDir))){
                 if (parent1 instanceof JsonValue) {
                     if (parent1 instanceof JsonLiteral) {
                         PsiElement parent = parent1.getParent();
@@ -39,28 +41,28 @@ public class GroupJsonCompletionContributor extends CompletionContributor {
                             String name = jsonProperty.getName();
                             JsonLiteral literal = (JsonLiteral) parent1;
                             if(name.equals(MyScratchUtils.TEMPLATE_NAME)){
-                                String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeTemplateDirectory();
+                                String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeTemplateDirectory(currentBaseDir);
                                 File file = new File(easyCodeTemplateDirectory);
                                 File[] files = file.listFiles();
                                 for (File file1 : files) {
                                     result.addElement(LookupElementBuilder.create(file1.getName()));
                                 }
                             } else if(name.equals(MyScratchUtils.GLOBALCONFIGNAME)){
-                                String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeSubDirectory(MyScratchUtils.GLOBAL_CONFIG);
+                                String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeSubDirectory(currentBaseDir,MyScratchUtils.GLOBAL_CONFIG);
                                 File file = new File(easyCodeTemplateDirectory);
                                 File[] files = file.listFiles();
                                 for (File file1 : files) {
                                     result.addElement(LookupElementBuilder.create(file1.getName()));
                                 }
                             } else if (name.equals(MyScratchUtils.COLUMNCONFIGNAME)) {
-                                String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeSubDirectory(MyScratchUtils.COLUMN_CONFIG);
+                                String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeSubDirectory(currentBaseDir,MyScratchUtils.COLUMN_CONFIG);
                                 File file = new File(easyCodeTemplateDirectory);
                                 File[] files = file.listFiles();
                                 for (File file1 : files) {
                                     result.addElement(LookupElementBuilder.create(file1.getName()));
                                 }
                             } else if (name.equals(MyScratchUtils.TYPEMAPPERCONFIGNAME)) {
-                                String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeSubDirectory(MyScratchUtils.TYPE_MAPPER_CONFIG);
+                                String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeSubDirectory(currentBaseDir,MyScratchUtils.TYPE_MAPPER_CONFIG);
                                 File file = new File(easyCodeTemplateDirectory);
                                 File[] files = file.listFiles();
                                 for (File file1 : files) {

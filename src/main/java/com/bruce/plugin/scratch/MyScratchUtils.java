@@ -7,6 +7,7 @@ import com.bruce.plugin.enums.ColumnConfigType;
 import com.bruce.plugin.service.SettingsStorageService;
 import com.bruce.plugin.tool.CurrGroupUtils;
 import com.bruce.plugin.tool.JSON;
+import com.bruce.plugin.tool.ProjectUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.intellij.ide.extensionResources.ExtensionsRootType;
@@ -70,7 +71,7 @@ public final class MyScratchUtils {
         Map<String, TypeMapperGroup> typeMapperGroupMap = parse.getTypeMapperGroupMap();
         var5.writeFilesToScratchFile(s1, TYPE_MAPPER_CONFIG, typeMapperGroupMap);
         String path = s1;
-        markDirtyAndRefresh(false,true,true,new File(FileUtil.toSystemDependentName(path)));
+        markDirtyAndRefresh(false, true, true, new File(FileUtil.toSystemDependentName(path)));
         return s1;
     }
 
@@ -79,7 +80,7 @@ public final class MyScratchUtils {
         File file = new File(FileUtil.toSystemDependentName(s1));
         Integer count = 1;
         String qqq = s1;
-        while(file.exists()){
+        while (file.exists()) {
             qqq = s1 + "_" + count.toString();
             file = new File(FileUtil.toSystemDependentName(qqq));
             count++;
@@ -89,23 +90,23 @@ public final class MyScratchUtils {
 
 
     @NotNull
-    private static String getNewNameIfFileExistWhenFileChild(File file1,String s1) {
+    private static String getNewNameIfFileExistWhenFileChild(File file1, String s1) {
         String suffix = ".json";
         boolean hasSuffix = false;
-        if(s1.endsWith(suffix)){
-            s1 = s1.substring(0,s1.length()-suffix.length());
+        if (s1.endsWith(suffix)) {
+            s1 = s1.substring(0, s1.length() - suffix.length());
             hasSuffix = true;
         }
-        File file = new File(file1,s1);
+        File file = new File(file1, s1);
         Integer count = 1;
         String qqq = s1;
-        while(file.exists()){
+        while (file.exists()) {
             qqq = s1 + "_" + count.toString();
             file = new File(FileUtil.toSystemDependentName(qqq));
             count++;
         }
 
-        if(hasSuffix){
+        if (hasSuffix) {
             qqq = qqq + suffix;
         }
         return qqq;
@@ -120,34 +121,50 @@ public final class MyScratchUtils {
         VfsUtil.markDirtyAndRefresh(async, recursive, reloadChildren, virtualFiles);
     }
 
-    @NotNull
-    public static String getEasyCodeDirectory() {
+
+    public static List<String> getEasyCodeDirectoryList(Project project) {
+        List<String> result = Lists.newArrayList();
         String rootPath = ScratchFileService.getInstance().getRootPath(ExtensionsRootType.getInstance());
         String easyCodePath = rootPath + "/" + EASYCODESUB;
+        result.add(easyCodePath);
+        VirtualFile baseDir = ProjectUtils.getBaseDir(project);
+        if (baseDir != null) {
+            result.add(baseDir.getPath()+"/"+EASYCODESUB);
+        }
+        //should make people support user define directory.
+        return result;
+    }
+
+
+    //return null if base dir not found
+    public static String getCurrentBaseDir(Project project, VirtualFile virtualFile) {
+        List<String> easyCodeDirectoryList = getEasyCodeDirectoryList(project);
+        for (String s : easyCodeDirectoryList) {
+            if (virtualFile.getPath().startsWith(s)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+
+    @NotNull
+    public static String getEasyCodeSubDirectory(String baseDir,String subDirectory) {
+        String easyCodePath = baseDir + "/" + subDirectory;
         return easyCodePath;
     }
 
 
     @NotNull
-    public static String getEasyCodeSubDirectory(String subDirectory) {
-        String rootPath = getEasyCodeDirectory();
-        String easyCodePath = rootPath+"/"+subDirectory;
+    public static String getEasyCodeTemplateDirectory(String baseDir) {
+        String easyCodePath = baseDir + "/" + MyScratchUtils.TEMPLATESFOLDERNAME;
         return easyCodePath;
     }
 
 
     @NotNull
-    public static String getEasyCodeTemplateDirectory() {
-        String rootPath = getEasyCodeDirectory();
-        String easyCodePath = rootPath +"/"+MyScratchUtils.TEMPLATESFOLDERNAME;
-        return easyCodePath;
-    }
-
-
-    @NotNull
-    public static String getEasyCodeGroupFile() {
-        String rootPath = getEasyCodeDirectory();
-        String easyCodePath = rootPath +"/group.json";
+    public static String getEasyCodeGroupFile(String baseDir) {
+        String easyCodePath = baseDir + "/group.json";
         return easyCodePath;
     }
 
@@ -170,8 +187,8 @@ public final class MyScratchUtils {
         return groupInfos;
     }
 
-    public static boolean setDefaultForGroups(String groupName, @NotNull Project project) {
-        String easyCodeGroupFile = getEasyCodeGroupFile();
+    public static boolean setDefaultForGroups(String baseDir,String groupName, @NotNull Project project) {
+        String easyCodeGroupFile = getEasyCodeGroupFile(baseDir);
         List<GroupInfo> groupInfos = getAllGroupsFromFile(easyCodeGroupFile);
         GroupInfo selectedItem1 = null;
         for (GroupInfo groupInfo : groupInfos) {
@@ -180,7 +197,7 @@ public final class MyScratchUtils {
                 break;
             }
         }
-        if(selectedItem1==null){
+        if (selectedItem1 == null) {
             Messages.showErrorDialog("group info is not found in file " + easyCodeGroupFile, "error");
             return true;
         }
@@ -195,7 +212,7 @@ public final class MyScratchUtils {
         globalConfigGroupMap.put(tempscratchName, value);
         value.setName(tempscratchName);
         //serach in files.
-        String globalConfigDirectory = getEasyCodeSubDirectory(GLOBAL_CONFIG + "/" + selectedItem1.getGlobalConfigName());
+        String globalConfigDirectory = getEasyCodeSubDirectory(baseDir,GLOBAL_CONFIG + "/" + selectedItem1.getGlobalConfigName());
         ArrayList<GlobalConfig> myArray = Lists.newArrayList();
         value.setElementList(myArray);
         File file2 = new File(globalConfigDirectory);
@@ -212,7 +229,7 @@ public final class MyScratchUtils {
         }
         settingsStorage.setCurrGlobalConfigGroupName(tempscratchName);
         //
-        String columnConfigFileName = getEasyCodeSubDirectory(COLUMN_CONFIG + "/" + selectedItem1.getColumnConfigName());
+        String columnConfigFileName = getEasyCodeSubDirectory(baseDir,COLUMN_CONFIG + "/" + selectedItem1.getColumnConfigName());
         String columnConfig = readFileToString(new File(columnConfigFileName));
         Map<String, ColumnConfigGroup> columnConfigGroupMap = settingsStorage.getColumnConfigGroupMap();
         ColumnConfigGroup value1 = new ColumnConfigGroup();
@@ -223,7 +240,7 @@ public final class MyScratchUtils {
         columnConfigGroupMap.put(tempscratchName, value1);
         settingsStorage.setCurrColumnConfigGroupName(tempscratchName);
 
-        String typeMapperFileName = getEasyCodeSubDirectory(TYPE_MAPPER_CONFIG + "/" + selectedItem1.getTypeMapperName());
+        String typeMapperFileName = getEasyCodeSubDirectory(baseDir,TYPE_MAPPER_CONFIG + "/" + selectedItem1.getTypeMapperName());
         String typeMapper = readFileToString(new File(typeMapperFileName));
         Map<String, TypeMapperGroup> typeMapperGroupMap = settingsStorage.getTypeMapperGroupMap();
         TypeMapperGroup value2 = new TypeMapperGroup();

@@ -2,14 +2,13 @@ package com.bruce.plugin.ui.component;
 
 import com.bruce.plugin.dto.GroupInfo;
 import com.bruce.plugin.entity.Template;
-import com.bruce.plugin.entity.TemplateGroup;
 import com.bruce.plugin.scratch.MyScratchUtils;
-import com.bruce.plugin.service.SettingsStorageService;
 import com.bruce.plugin.tool.StringUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
+import com.intellij.openapi.ui.VerticalFlowLayout;
 import com.intellij.ui.components.JBCheckBox;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author bruce ge 2023/4/3
@@ -35,6 +33,8 @@ public class GroupSelectComponent {
      * 分组
      */
     private ComboBox<String> groupComboBox;
+
+    private ComboBox<String> easyCodeBasePath;
 
     /**
      * 选中所有复选框
@@ -50,14 +50,36 @@ public class GroupSelectComponent {
      * 模板面板
      */
     private JPanel templatePanel;
+    private Project project;
 
-    public GroupSelectComponent() {
+    public GroupSelectComponent(Project project) {
+        this.project = project;
         this.init();
     }
 
     private void init() {
         this.mainPanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel(new BorderLayout());
+        this.easyCodeBasePath = new ComboBox<>();
+        this.easyCodeBasePath.setSwingPopup(false);
+        this.easyCodeBasePath.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String basePath = (String) easyCodeBasePath.getSelectedItem();
+                if (StringUtils.isEmpty(basePath)) {
+                    return;
+                }
+                refreshGroupComboBox(basePath);
+            }
+        });
+        List<String> easyCodeDirectoryList = MyScratchUtils.getEasyCodeDirectoryList(project);
+        for (String easyCodeDirectory : easyCodeDirectoryList) {
+            File file = new File(easyCodeDirectory);
+            if (file.exists()) {
+                this.easyCodeBasePath.addItem(easyCodeDirectory);
+            }
+        }
+        this.easyCodeBasePath.setSelectedItem(easyCodeDirectoryList.get(0));
         this.groupComboBox = new ComboBox<>();
         this.groupComboBox.setSwingPopup(false);
         this.groupComboBox.addActionListener(new AbstractAction() {
@@ -82,7 +104,10 @@ public class GroupSelectComponent {
                 }
             }
         });
-        topPanel.add(this.groupComboBox, BorderLayout.WEST);
+        JPanel panel = new JPanel(new VerticalFlowLayout());
+        panel.add(this.easyCodeBasePath);
+        panel.add(this.groupComboBox);
+        topPanel.add(panel, BorderLayout.WEST);
         topPanel.add(this.allCheckbox, BorderLayout.EAST);
         this.mainPanel.add(topPanel, BorderLayout.NORTH);
         this.templatePanel = new JPanel(new GridLayout(-1, 2));
@@ -90,13 +115,19 @@ public class GroupSelectComponent {
         this.refreshData();
     }
 
+    private void refreshGroupComboBox(String basePath) {
+        refreshData();
+    }
+
     private void refreshData() {
-        String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile();
+        String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile((String) easyCodeBasePath.getSelectedItem());
         List<GroupInfo> allGroupsFromFile = MyScratchUtils.getAllGroupsFromFile(easyCodeGroupFile);
         //get all group info from string.
-        this.groupComboBox.removeAllItems();
-        for (GroupInfo groupName : allGroupsFromFile) {
-            this.groupComboBox.addItem(groupName.getGroupName());
+        if (this.groupComboBox != null) {
+            this.groupComboBox.removeAllItems();
+            for (GroupInfo groupName : allGroupsFromFile) {
+                this.groupComboBox.addItem(groupName.getGroupName());
+            }
         }
     }
 
@@ -117,7 +148,7 @@ public class GroupSelectComponent {
     @NotNull
     private List<File> getGroupTemlateFileListFromGroupName(String groupName) {
         String templateGroupFromGroupName = getTemplateGroupFromGroupName(groupName);
-        String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeTemplateDirectory();
+        String easyCodeTemplateDirectory = MyScratchUtils.getEasyCodeTemplateDirectory(getEasyCodeBasePath());
         List<File> templateFileList = Lists.newArrayList();
         File file = new File(easyCodeTemplateDirectory);
         for (File listFile : file.listFiles()) {
@@ -132,7 +163,7 @@ public class GroupSelectComponent {
     }
 
     public String getTemplateGroupFromGroupName(String groupName) {
-        String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile();
+        String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile(getEasyCodeBasePath());
         List<GroupInfo> allGroupsFromFile = MyScratchUtils.getAllGroupsFromFile(easyCodeGroupFile);
         String templateGroup = null;
         for (GroupInfo groupInfo : allGroupsFromFile) {
@@ -151,7 +182,7 @@ public class GroupSelectComponent {
         this.groupComboBox.setSelectedItem(groupName);
     }
 
-    public String getSelectedGroup(){
+    public String getSelectedGroup() {
         return (String) this.groupComboBox.getSelectedItem();
     }
 
@@ -161,9 +192,9 @@ public class GroupSelectComponent {
             return Collections.emptyList();
         }
         List<File> groupTemlateFileListFromGroupName = getGroupTemlateFileListFromGroupName(groupName);
-        Map<String,File> map = Maps.newHashMap();
+        Map<String, File> map = Maps.newHashMap();
         for (File file : groupTemlateFileListFromGroupName) {
-            map.put(file.getName(),file);
+            map.put(file.getName(), file);
         }
         List<Template> result = new ArrayList<>();
         for (JBCheckBox checkBox : this.checkBoxList) {
@@ -178,5 +209,9 @@ public class GroupSelectComponent {
             }
         }
         return result;
+    }
+
+    public String getEasyCodeBasePath() {
+        return (String) easyCodeBasePath.getSelectedItem();
     }
 }

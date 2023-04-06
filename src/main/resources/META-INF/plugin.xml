@@ -279,7 +279,7 @@
     ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="192"/>
+    <idea-version since-build="191"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -306,6 +306,7 @@
         <!--系统设置面板-->
         <applicationConfigurable dynamic="true" instance="com.bruce.plugin.ui.MainSettingForm"/>
         <completion.contributor implementationClass="com.bruce.plugin.scratch.GroupJsonCompletionContributor" language="JSON"/>
+<!--        <editorNotificationProvider implementation="com.bruce.plugin.scratch.AddDependencyNotificationProvider"/>-->
     </extensions>
 
     <actions>

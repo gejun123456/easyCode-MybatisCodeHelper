@@ -15,6 +15,7 @@ import com.bruce.plugin.tool.ModuleUtils;
 import com.bruce.plugin.tool.ProjectUtils;
 import com.bruce.plugin.tool.StringUtils;
 import com.bruce.plugin.ui.component.GroupSelectComponent;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.module.Module;
@@ -33,6 +34,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -170,11 +172,23 @@ public class GenerateFromScratchFileUi extends DialogWrapper {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<String> easyCodeDirectory = MyScratchUtils.getEasyCodeDirectoryList(project);
-                String s1 = easyCodeDirectory.get(0);
-                String easyCodeSubDirectory = MyScratchUtils.getEasyCodeSubDirectory(s1, MyScratchUtils.GLOBAL_CONFIG);
-                String s = easyCodeSubDirectory + "/" + "MybatisCodeHelperPro" + "/mybatisCodehelper.vm";
-                //todo should check if file exist. just do it.
-                Messages.showInfoMessage(project, "Edit file", "edit file in path:" + s);
+                for (String s : easyCodeDirectory) {
+                    File file = new File(s);
+                    if(file.exists()){
+                        String easyCodeSubDirectory = MyScratchUtils.getEasyCodeSubDirectory(s, MyScratchUtils.GLOBAL_CONFIG);
+                        String location = easyCodeSubDirectory + "/" + "MybatisCodeHelperPro" + "/mybatisCodehelper.vm";
+                        //todo should check if file exist. just do it.
+                        Messages.showInfoMessage(project, "Edit file", "edit file in path:" + location);
+                        return;
+                    }
+                }
+                // else generate folder for it.
+                //
+                int i = Messages.showOkCancelDialog("Go To WebSite to see example", "EasyCode Template file not found",
+                        "Ok","Cancel",null);
+                if(i==Messages.OK) {
+                    BrowserUtil.browse("https://github.com/gejun123456/EasyCodeMybatisCodeHelperTemplates");
+                }
             }
         });
     }

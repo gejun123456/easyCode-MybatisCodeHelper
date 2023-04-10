@@ -360,6 +360,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
             tableInfo.setSavePackageName("com.companyname.modulename");
         }
         // 生成代码
+        code = code.replace("/r","");
         VelocityResult result = CodeGenerateService.getInstance(ProjectUtils.getCurrProject()).generateDebug(new Template("temp", code), tableInfo);
 
         if (result.isHasError()) {
@@ -371,6 +372,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
             centerPanel.add(comp, BorderLayout.NORTH);
             dialogBuilder.setCenterPanel(centerPanel);
             String finalTemplate = result.getFinalTemplate();
+            finalTemplate = finalTemplate.replace("\r","");
             // 创建编辑框
             EditorFactory editorFactory = EditorFactory.getInstance();
             Document document = editorFactory.createDocument(finalTemplate);
@@ -393,7 +395,9 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
         } else {
             // 创建编辑框
             EditorFactory editorFactory = EditorFactory.getInstance();
-            Document document = editorFactory.createDocument(result.getCode());
+            String code1 = result.getCode();
+            code1 = code1.replace("\r","");
+            Document document = editorFactory.createDocument(code1);
             // 标识为模板，让velocity跳过语法校验
             document.putUserData(FileTemplateManager.DEFAULT_TEMPLATE_PROPERTIES, FileTemplateManager.getInstance(ProjectUtils.getCurrProject()).getDefaultProperties());
             Editor editor = editorFactory.createViewer(document, ProjectUtils.getCurrProject());

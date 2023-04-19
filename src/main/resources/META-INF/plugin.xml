@@ -24,6 +24,15 @@
 
 
     <change-notes><![CDATA[
+        <p>1.3.1-java.RELEASE</p>
+        <ul>
+            <li>1.support easycode directory use matched group</li>
+            <li>2.fix null pointer exception</li>
+        </ul>
+        <ul>
+            <li>1.easycode模版文件上预览时默认使用当前模版对应的group</li>
+            <li>2.null pointer exception修复</li>
+        </ul>
         <p>1.3.0-java.RELEASE</p>
         <ul>
             <li>1.support generate on project easyCode folder</li>

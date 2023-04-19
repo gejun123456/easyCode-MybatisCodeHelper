@@ -84,7 +84,8 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
             JLabel groupLabel = new JLabel("group:");
             myLinksPanel.add(groupLabel);
             ComboBox<GroupInfo> groupComboBox = new ComboBox<>();
-            loadGroups(currentBaseDir,project,groupComboBox,false);
+            loadGroups(virtualFile,currentBaseDir,project,groupComboBox,false);
+
             //read group info from text.
             myLinksPanel.add(groupComboBox);
 
@@ -136,7 +137,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     FileDocumentManager.getInstance().saveAllDocuments();
-                    loadGroups(currentBaseDir, project, groupComboBox,true);
+                    loadGroups(virtualFile, currentBaseDir, project, groupComboBox,true);
                 }
             });
 
@@ -300,7 +301,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
 
     }
 
-    private void loadGroups(String currentBaseDir, @NotNull Project project, ComboBox<GroupInfo> groupComboBox, boolean showErorr) {
+    private void loadGroups(VirtualFile virtualFile, String currentBaseDir, @NotNull Project project, ComboBox<GroupInfo> groupComboBox, boolean showErorr) {
 
         String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile(currentBaseDir);
         File file = new File(easyCodeGroupFile);
@@ -326,7 +327,16 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
             for (GroupInfo groupInfo : o) {
                 groupComboBox.addItem(groupInfo);
             }
-            //todo get the group with template name make it first.
+
+            String name = virtualFile.getParent().getName();
+            for (GroupInfo groupInfo : o) {
+                if(groupInfo.getTemplateName().equals(name)){
+                    groupComboBox.setSelectedItem(groupInfo);
+                    break;
+                }
+            }
+            //use the group that match the template
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }

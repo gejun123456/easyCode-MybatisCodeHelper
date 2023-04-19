@@ -42,7 +42,7 @@ public class ColumnInfoDTO {
 
     private String getJavaType(String dbType) {
         TypeMapperGroup currTypeMapperGroup = CurrGroupUtils.getCurrTypeMapperGroup();
-        if(currTypeMapperGroup==null){
+        if(currTypeMapperGroup==null||currTypeMapperGroup.getElementList()==null){
             return "java.lang.Object";
         }
         for (TypeMapper typeMapper : currTypeMapperGroup.getElementList()) {

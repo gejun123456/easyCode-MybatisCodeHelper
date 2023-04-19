@@ -1,5 +1,6 @@
 package com.bruce.plugin.dto;
 
+import com.bruce.plugin.entity.TypeMapperGroup;
 import com.intellij.database.model.DasColumn;
 import com.intellij.psi.PsiField;
 import com.bruce.plugin.entity.TypeMapper;
@@ -40,7 +41,11 @@ public class ColumnInfoDTO {
     }
 
     private String getJavaType(String dbType) {
-        for (TypeMapper typeMapper : CurrGroupUtils.getCurrTypeMapperGroup().getElementList()) {
+        TypeMapperGroup currTypeMapperGroup = CurrGroupUtils.getCurrTypeMapperGroup();
+        if(currTypeMapperGroup==null){
+            return "java.lang.Object";
+        }
+        for (TypeMapper typeMapper : currTypeMapperGroup.getElementList()) {
             if (typeMapper.getMatchType() == MatchType.ORDINARY) {
                 if (dbType.equalsIgnoreCase(typeMapper.getColumnType())) {
                     return typeMapper.getJavaType();

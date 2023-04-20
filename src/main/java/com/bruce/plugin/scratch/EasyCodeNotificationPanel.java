@@ -131,7 +131,7 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
                 }
             });
 
-            JButton refreshGroupButton = new JButton("refresh group info");
+            JButton refreshGroupButton = new JButton("refresh");
 
             refreshGroupButton.addActionListener(new ActionListener() {
                 @Override
@@ -141,9 +141,10 @@ public class EasyCodeNotificationPanel extends EditorNotificationPanel {
                 }
             });
 
+
             myLinksPanel.add(refreshGroupButton);
 
-            JLabel label = new JLabel("choose table:");
+            JLabel label = new JLabel("table:");
             myLinksPanel.add(label);
             ComboBox<String> tableCombox = new ComboBox<>();
 

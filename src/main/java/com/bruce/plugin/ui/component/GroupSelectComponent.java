@@ -76,7 +76,11 @@ public class GroupSelectComponent {
         for (String easyCodeDirectory : easyCodeDirectoryList) {
             File file = new File(easyCodeDirectory);
             if (file.exists()) {
-                this.easyCodeBasePath.addItem(easyCodeDirectory);
+                String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile(easyCodeDirectory);
+                File groupFile = new File(easyCodeGroupFile);
+                if(groupFile.exists()) {
+                    this.easyCodeBasePath.addItem(easyCodeDirectory);
+                }
             }
         }
         this.easyCodeBasePath.setSelectedItem(easyCodeDirectoryList.get(0));

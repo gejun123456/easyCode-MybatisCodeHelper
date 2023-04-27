@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.bruce.easycode.mybatiscodehelper</id>
     <name>EasyCode-MybatisCodeHelper</name>
-    <vendor email="gejun123456@gmail.com" url="https://github.com/gejun123456/easyCode-MybatisCodeHelper">EasyCode-MybatisCodeHelper</vendor>
+    <vendor email="gejun123456@gmail.com" url="https://github.com/gejun123456/easyCode-MybatisCodeHelper">bruce-ge</vendor>
 
     <description><![CDATA[
       <tag>EasyCode,Easy Code,easy,code,code generate,code tools</tag>

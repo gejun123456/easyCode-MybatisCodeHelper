@@ -83,6 +83,7 @@ public class GenerateFromScratchFileAction extends AnAction {
                 }
                 BrowserUtil.browse("https://github.com/gejun123456/EasyCodeMybatisCodeHelperTemplates");
             }
+            return;
         } else {
             new GenerateFromScratchFileUi(event.getProject()).show();
         }

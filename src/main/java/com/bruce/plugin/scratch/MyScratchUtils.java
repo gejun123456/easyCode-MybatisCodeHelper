@@ -178,12 +178,17 @@ public final class MyScratchUtils {
         }
     }
 
-    @Nullable
+    @NotNull
     public static List<GroupInfo> getAllGroupsFromFile(String easyCodeGroupFile) {
-        String s = readFileToString(new File(easyCodeGroupFile));
-        List<GroupInfo> groupInfos = new Gson().fromJson(s, new TypeToken<List<GroupInfo>>() {
-        }.getType());
-        return groupInfos;
+        File file3 = new File(easyCodeGroupFile);
+        if(file3.exists()) {
+            String s = readFileToString(file3);
+            List<GroupInfo> groupInfos = new Gson().fromJson(s, new TypeToken<List<GroupInfo>>() {
+            }.getType());
+            return groupInfos;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public static boolean setDefaultForGroups(String baseDir,String groupName, @NotNull Project project) {

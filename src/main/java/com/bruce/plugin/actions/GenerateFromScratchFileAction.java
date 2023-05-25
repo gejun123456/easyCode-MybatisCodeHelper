@@ -69,17 +69,18 @@ public class GenerateFromScratchFileAction extends AnAction {
 //            return;
 //        }
         //开始处理
+        // TODO: need to check if group.json file exist
         List<String> easyCodeDirectoryList = MyScratchUtils.getEasyCodeDirectoryList(project);
         boolean s = checkIfFileExist(easyCodeDirectoryList);
-        if(!s){
-            int i = Messages.showOkCancelDialog("Go To WebSite to see example", "EasyCode Template file not found",
-                    "Ok","Cancel",null);
-            if(i==Messages.OK) {
+        if (!s) {
+            int i = Messages.showOkCancelDialog("Go To WebSite to see example", "EasyCode Template File Not Found, Should Have EasyCode Folder with group.json File",
+                    "Ok", "Cancel", null);
+            if (i == Messages.OK) {
                 String s1 = easyCodeDirectoryList.get(0);
                 File file = new File(s1);
-                if(!file.exists()){
+                if (!file.exists()) {
                     file.mkdirs();
-                    MyScratchUtils.markDirtyAndRefresh(false,false,true,file);
+                    MyScratchUtils.markDirtyAndRefresh(false, false, true, file);
                 }
                 BrowserUtil.browse("https://github.com/gejun123456/EasyCodeMybatisCodeHelperTemplates");
             }
@@ -92,8 +93,11 @@ public class GenerateFromScratchFileAction extends AnAction {
     private boolean checkIfFileExist(List<String> easyCodeDirectoryList) {
         boolean s = false;
         for (String palce : easyCodeDirectoryList) {
-            if(new File(palce).exists()){
-                return true;
+            if (new File(palce).exists()) {
+                String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile(palce);
+                if (new File(easyCodeGroupFile).exists()) {
+                    return true;
+                }
             }
         }
         return false;
@@ -144,7 +148,7 @@ public class GenerateFromScratchFileAction extends AnAction {
         return true;
     }
 
-    public static class Dialog  extends DialogWrapper {
+    public static class Dialog extends DialogWrapper {
 
         private String typeName;
 

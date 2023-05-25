@@ -111,7 +111,7 @@ public class MainActionGroup extends ActionGroup {
 
         AnAction generateFromScratch = actionManager.getAction(generateFromScratchActionId);
         if (generateFromScratch == null) {
-            generateFromScratch = new GenerateFromScratchFileAction("GenerateFromScratchFile(new)");
+            generateFromScratch = new GenerateFromScratchFileAction("GenerateFromEasyCodeFolderFile(new)");
             actionManager.registerAction(generateFromScratchActionId, generateFromScratch);
         }
         // 表配置菜单

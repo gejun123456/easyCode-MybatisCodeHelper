@@ -12,6 +12,7 @@
       <li>The code that supports generating multiple tables at the same time. Each table has a separate configuration information. Full personalization definition, the rules are set by you.</li>
           <li>The plugin is forked from easy code plugin, mainly support for mybatisCodeHelper plugin, like add @Table comment in BaseResultMap, to help MybatisCodeHelperPro plugin for auto completion and inspection</li>
           <li>Support kotlin code generate</li>
+          <li>Support Generate by project easyCode folder template files</li>
       </ul>
       <h3>中文：</h3>
       <ul>
@@ -20,6 +21,7 @@
       <li>只要是与数据库相关的代码都可以通过自定义模板来生成。支持数据库类型与java类型映射关系配置。</li>
       <li>支持同时生成生成多张表的代码。每张表有独立的配置信息。完全的个性化定义，规则由你设置。</li>
       <li>插件fork于easy code插件，该版本用于兼容MybatisCodeHelper插件，方便MybatisCodeHelper插件做代码生成补全检测等</li>
+          <li>支持从项目的easyCode目录里面的模版文件来生成代码 表上右键GenerateFromEasyCodeFolderFile即可</li>
     ]]></description>
 
 

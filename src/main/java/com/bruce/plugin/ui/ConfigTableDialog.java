@@ -1,5 +1,6 @@
 package com.bruce.plugin.ui;
 
+import com.bruce.plugin.service.TableInfoSettingsService;
 import com.intellij.openapi.ui.ComboBoxTableRenderer;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.BooleanTableCellEditor;
@@ -10,7 +11,6 @@ import com.bruce.plugin.dict.GlobalDict;
 import com.bruce.plugin.entity.ColumnConfig;
 import com.bruce.plugin.entity.TableInfo;
 import com.bruce.plugin.factory.CellEditorFactory;
-import com.bruce.plugin.service.TableInfoSettingsService;
 import com.bruce.plugin.tool.CacheDataUtils;
 import com.bruce.plugin.tool.CurrGroupUtils;
 import com.bruce.plugin.tool.ProjectUtils;

@@ -1,5 +1,6 @@
 package com.bruce.plugin.ui.component;
 
+import com.bruce.plugin.service.TableInfoSettingsService;
 import com.intellij.database.model.DasNamespace;
 import com.intellij.database.model.DasObject;
 import com.intellij.database.model.DasTable;
@@ -26,7 +27,6 @@ import com.bruce.plugin.dict.GlobalDict;
 import com.bruce.plugin.entity.TableInfo;
 import com.bruce.plugin.entity.Template;
 import com.bruce.plugin.service.CodeGenerateService;
-import com.bruce.plugin.service.TableInfoSettingsService;
 import com.bruce.plugin.tool.CacheDataUtils;
 import com.bruce.plugin.tool.CollectionUtil;
 import com.bruce.plugin.tool.ProjectUtils;

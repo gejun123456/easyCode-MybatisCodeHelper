@@ -1,12 +1,12 @@
 package com.bruce.plugin.actions;
 
+import com.bruce.plugin.service.TableInfoSettingsService;
 import com.intellij.database.psi.DbTable;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiElement;
 import com.bruce.plugin.dict.GlobalDict;
-import com.bruce.plugin.service.TableInfoSettingsService;
 import com.bruce.plugin.tool.CacheDataUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

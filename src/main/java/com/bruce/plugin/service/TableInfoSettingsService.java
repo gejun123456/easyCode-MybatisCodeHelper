@@ -1,15 +1,16 @@
 package com.bruce.plugin.service;
 
+import com.bruce.plugin.service.impl.TableInfoSettingsServiceImpl;
+import com.bruce.plugin.tool.ProjectUtils;
 import com.intellij.database.psi.DbTable;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.bruce.plugin.dto.TableInfoSettingsDTO;
 import com.bruce.plugin.entity.TableInfo;
-import com.bruce.plugin.service.impl.TableInfoSettingsServiceImpl;
-import com.bruce.plugin.tool.ProjectUtils;
 
 import java.io.IOException;
 
@@ -19,6 +20,7 @@ import java.io.IOException;
  * @date 2021/08/14 15:16
  */
 public interface TableInfoSettingsService extends PersistentStateComponent<TableInfoSettingsDTO> {
+
     /**
      * 获取实例
      *
@@ -26,7 +28,7 @@ public interface TableInfoSettingsService extends PersistentStateComponent<Table
      */
     static TableInfoSettingsService getInstance() {
         try {
-            return ServiceManager.getService(ProjectUtils.getCurrProject(),TableInfoSettingsServiceImpl.class);
+            return ServiceManager.getService(ProjectUtils.getCurrProject(), TableInfoSettingsServiceImpl.class);
         } catch (AssertionError e) {
             // 出现配置文件被错误修改，或不兼容时直接删除配置文件。
             VirtualFile workspaceFile = ProjectUtils.getCurrProject().getWorkspaceFile();
@@ -44,6 +46,29 @@ public interface TableInfoSettingsService extends PersistentStateComponent<Table
             }
             // 重新获取配置
             return ServiceManager.getService(ProjectUtils.getCurrProject(),TableInfoSettingsServiceImpl.class);
+        }
+    }
+
+    static TableInfoSettingsService getInstance(Project project) {
+        try {
+            return ServiceManager.getService(project,TableInfoSettingsServiceImpl.class);
+        } catch (AssertionError e) {
+            // 出现配置文件被错误修改，或不兼容时直接删除配置文件。
+            VirtualFile workspaceFile = project.getWorkspaceFile();
+            if (workspaceFile != null) {
+                VirtualFile configFile = workspaceFile.getParent().findChild("easyCodeMybatisCodeHelperTableSettingEncode.xml");
+                if (configFile != null && configFile.exists()) {
+                    WriteCommandAction.runWriteCommandAction(project, () -> {
+                        try {
+                            configFile.delete(null);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+                }
+            }
+            // 重新获取配置
+            return ServiceManager.getService(project,TableInfoSettingsServiceImpl.class);
         }
     }
 

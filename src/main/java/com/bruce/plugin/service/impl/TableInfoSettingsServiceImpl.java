@@ -3,6 +3,7 @@ package com.bruce.plugin.service.impl;
 import com.intellij.database.psi.DbTable;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.bruce.plugin.dto.TableInfoSettingsDTO;
 import com.bruce.plugin.entity.TableInfo;
@@ -21,6 +22,7 @@ import java.util.Objects;
 public class TableInfoSettingsServiceImpl implements TableInfoSettingsService {
 
     private TableInfoSettingsDTO tableInfoSettings = new TableInfoSettingsDTO();
+
 
     @Nullable
     @Override

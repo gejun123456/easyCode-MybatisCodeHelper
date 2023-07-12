@@ -3,7 +3,7 @@
   <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="48" y="54" width="436" height="383"/>
+      <xy x="48" y="54" width="874" height="383"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -51,7 +51,7 @@
             </constraints>
             <properties>
               <text resource-bundle="string" key="label.unified.config"/>
-              <toolTipText value="在多表生成时，每张表会有自己保存的配置信息。&lt;br&gt;勾选统一配置表示所有表都使用当前的配置信息进行生成。&lt;br&gt;否则使用自身保存的配置信息生成代码。"/>
+              <toolTipText resource-bundle="string" key="unifiedConfig"/>
             </properties>
           </component>
           <component id="af94e" class="javax.swing.JCheckBox" binding="titleSureCheckBox">
@@ -59,7 +59,7 @@
               <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="弹框选是"/>
+              <text resource-bundle="string" key="allClickYes"/>
               <toolTipText value="后续弹出的所有代码覆盖弹框全部选是"/>
             </properties>
           </component>
@@ -68,7 +68,7 @@
               <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="格式化代码"/>
+              <text resource-bundle="string" key="reformat code"/>
               <toolTipText value="对生成完毕的代码进行格式化"/>
             </properties>
           </component>
@@ -77,7 +77,7 @@
               <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="弹框选否"/>
+              <text resource-bundle="string" key="allClickNo"/>
               <toolTipText value="后续弹出的所有代码覆盖弹框全部选否"/>
             </properties>
           </component>

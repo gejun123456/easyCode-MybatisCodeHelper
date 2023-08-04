@@ -1,0 +1,59 @@
+##定义初始变量
+$!{mybatisCodehelper.vm}
+#set($serviceName = $tool.append($tableInfo.name, "Service"))
+##设置回调
+#set($serviceSavePath = $tool.append(${serviceSrcFolder},"/",${servicePackageName.replace(".","/")}))
+
+$!callback.setSavePath($serviceSavePath)
+$!callback.setFileName($tool.append($serviceName, ".java"))
+
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+
+package $!{servicePackageName};
+
+import $!{modelPackageName}.$!{tableInfo.name};
+
+/**
+ * $!{tableInfo.comment}($!{tableInfo.name})表服务接口
+ *
+ * @author $!author
+ * @since $!time.currTime()
+ */
+public interface $!{serviceName} {
+
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param $!pk.name 主键
+     * @return 实例对象
+     */
+    $!{tableInfo.name} queryById($!pk.shortType $!pk.name);
+
+    /**
+     * 新增数据
+     *
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @return 实例对象
+     */
+    $!{tableInfo.name} insert($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
+
+    /**
+     * 修改数据
+     *
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @return 实例对象
+     */
+    $!{tableInfo.name} update($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name}));
+
+    /**
+     * 通过主键删除数据
+     *
+     * @param $!pk.name 主键
+     * @return 是否成功
+     */
+    boolean deleteById($!pk.shortType $!pk.name);
+
+}

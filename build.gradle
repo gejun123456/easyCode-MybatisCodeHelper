@@ -71,6 +71,12 @@ dependencies {
 //    compile 'com.google.guava:guava:29.0-jre'
     // velocity支持
 //    compile 'org.apache.velocity:velocity:1.7'
+
+//    compile fileTree(dir: 'libs', includes: ['*.jar'])
+
+    //add slf4j
+//    compile 'org.slf4j:slf4j-api:1.7.30'
+
     // groovy支持
 //    compile 'org.codehaus.groovy:groovy:3.0.2'
     // beetl支持

@@ -1,0 +1,70 @@
+##导入宏定义
+$!{define.vm}
+$!{mybatisCodehelper.vm}
+
+#set($entitySavePath = $tool.append(${javamodelSrcFolder},"/",${modelPackageName.replace(".","/")}))
+
+$!callback.setSavePath($entitySavePath)
+$!callback.setFileName($tool.append($tableInfo.name, ".java"))
+
+##自动导入包（全局变量）
+package ${modelPackageName};
+$!autoImport
+import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.IdType;
+
+##表注释（宏定义）
+#tableComment("表实体类")
+@SuppressWarnings("serial")
+#if(${useLombok})
+@Data
+#end
+#if($useSwagger)
+@ApiModel(value = "$!{tableInfo.name}", description = "$!{tableInfo.comment}")
+#end
+#if($useOpenApi)
+@Schema(name = "$!{tableInfo.name}", description = "$!{tableInfo.comment}")
+#end
+public class $!{tableInfo.name}  {
+#foreach($column in $tableInfo.fullColumn)
+    #if(${column.comment})/**
+     * ${column.comment}
+     */
+    #end
+#if($useSwagger)
+@ApiModelProperty(value = "${column.comment}")
+#end
+#if($useOpenApi)
+@Schema(description = "${column.comment}")
+#end
+#if(${column.obj.name} == ${tableInfo.pkColumn.get(0).obj.name})
+@TableId(value = "${column.obj.name}", type = IdType.AUTO)
+#else
+@TableField(value = "${column.obj.name}")
+#end
+    private $!{tool.getClsNameByFullName($column.type)} $!{column.name};
+#end
+
+#if($useLombok)
+#else
+#foreach($column in $tableInfo.fullColumn)
+    #getSetMethod($column)
+#end
+#end
+
+
+#foreach($column in $tableInfo.pkColumn)
+    /**
+     * 获取主键值
+     *
+     * @return 主键值
+     */
+    @Override
+    protected Serializable pkVal() {
+        return this.$!column.name;
+    }
+#break
+#end
+}

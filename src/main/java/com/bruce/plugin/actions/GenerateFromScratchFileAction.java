@@ -4,15 +4,16 @@ import com.bruce.plugin.dict.GlobalDict;
 import com.bruce.plugin.entity.TypeMapper;
 import com.bruce.plugin.enums.MatchType;
 import com.bruce.plugin.scratch.MyScratchUtils;
-import com.bruce.plugin.tool.CacheDataUtils;
 import com.bruce.plugin.tool.CurrGroupUtils;
 import com.bruce.plugin.tool.StringUtils;
 import com.bruce.plugin.ui.GenerateFromScratchFileUi;
-import com.bruce.plugin.ui.SelectSavePath;
+import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.database.model.DasColumn;
 import com.intellij.database.psi.DbTable;
 import com.intellij.database.util.DasUtil;
 import com.intellij.ide.BrowserUtil;
+import com.intellij.ide.extensionResources.ExtensionsRootType;
+import com.intellij.ide.scratch.ScratchFileService;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -21,20 +22,35 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.psi.PsiDocumentManager;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.util.containers.JBIterable;
 import com.intellij.util.ui.JBUI;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import static com.bruce.plugin.scratch.MyScratchUtils.EASYCODESUB;
 
 /**
  * @author bruce ge 2023/4/3
@@ -73,9 +89,34 @@ public class GenerateFromScratchFileAction extends AnAction {
         List<String> easyCodeDirectoryList = MyScratchUtils.getEasyCodeDirectoryList(project);
         boolean s = checkIfFileExist(easyCodeDirectoryList);
         if (!s) {
-            int i = Messages.showOkCancelDialog("Go To WebSite to see example", "EasyCode Template File Not Found, Should Have EasyCode Folder with group.json File",
-                    "Ok", "Cancel", null);
-            if (i == Messages.OK) {
+            //init easyCode folder for user.
+            int i1 = Messages.showDialog("EasyCode Template File Not Found, Should Have EasyCode Folder with group.json File" , "EasyCode Template File Not Found" , new String[]{"Init EasyCode Folder In Scratch file" , "How to use" , "Cancel"}, 0, null);
+            if(i1==0){
+                String rootPath = ScratchFileService.getInstance().getRootPath(ExtensionsRootType.getInstance());
+                String easyCodePath = rootPath + "/" + EASYCODESUB;
+                //load zip from resource and save to user path.
+                InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("EasyCode/EasyCode.zip" );
+                //unpack the zip file and save to user path
+                unzipTheFileAndSaveToPath(resourceAsStream, rootPath);
+                VfsUtil.markDirtyAndRefresh(false,true,true,new File(easyCodePath));
+                String easyCodeGroupFile = MyScratchUtils.getEasyCodeGroupFile(easyCodePath);
+                VirtualFile fileByIoFile = VfsUtil.findFileByIoFile(new File(easyCodeGroupFile), true);
+                if(fileByIoFile!=null){
+                    PsiFile file = PsiManager.getInstance(project).findFile(fileByIoFile);
+                    if(file!=null){
+                        CodeInsightUtil.positionCursor(project,file,file);
+                    }
+                }
+
+//                try {
+//                    copyFromJar("EasyCode",new File(easyCodePath).toPath());
+//                } catch (URISyntaxException e) {
+//                    throw new RuntimeException(e);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+
+            } else if(i1==1){
                 String s1 = easyCodeDirectoryList.get(0);
                 File file = new File(s1);
                 if (!file.exists()) {
@@ -84,11 +125,54 @@ public class GenerateFromScratchFileAction extends AnAction {
                 }
                 BrowserUtil.browse("https://github.com/gejun123456/EasyCodeMybatisCodeHelperTemplates");
             }
-            return;
+           return;
         } else {
             new GenerateFromScratchFileUi(event.getProject()).show();
         }
     }
+
+    //unzip the file and save to user path
+    private void unzipTheFileAndSaveToPath(InputStream resourceAsStream, String easyCodePath) {
+        //unzip the resourceStream
+        try {
+            ZipUtils.unzip(resourceAsStream, easyCodePath);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void copyFromJar(String source, final Path target) throws URISyntaxException, IOException {
+        URI resource = getClass().getClassLoader().getResource("EasyCode").toURI();
+        FileSystem fileSystem = FileSystems.newFileSystem(
+                resource,
+                Collections.<String, String>emptyMap()
+        );
+
+
+        final Path jarPath = fileSystem.getPath(source);
+
+        Files.walkFileTree(jarPath, new SimpleFileVisitor<Path>() {
+
+            private Path currentTarget;
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                currentTarget = target.resolve(jarPath.relativize(dir).toString());
+                Files.createDirectories(currentTarget);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.copy(file, target.resolve(jarPath.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+
+        });
+    }
+
+
+
 
     private boolean checkIfFileExist(List<String> easyCodeDirectoryList) {
         boolean s = false;
@@ -192,6 +276,33 @@ public class GenerateFromScratchFileAction extends AnAction {
             typeMapper.setJavaType(selectedItem);
             typeMapper.setColumnType(typeName);
             CurrGroupUtils.getCurrTypeMapperGroup().getElementList().add(typeMapper);
+        }
+    }
+
+    private static class ZipUtils {
+        public static void unzip(InputStream resourceAsStream, String easyCodePath) {
+            try {
+                ZipInputStream zipInputStream = new ZipInputStream(resourceAsStream);
+                ZipEntry nextEntry = zipInputStream.getNextEntry();
+                while (nextEntry != null) {
+                    String name = nextEntry.getName();
+                    if (nextEntry.isDirectory()) {
+                        File file = new File(easyCodePath + "/" + name);
+                        file.mkdirs();
+                    } else {
+                        File file = new File(easyCodePath + "/" + name);
+                        file.getParentFile().mkdirs();
+                        FileOutputStream fileOutputStream = new FileOutputStream(file);
+                        IOUtils.copy(zipInputStream, fileOutputStream);
+                        fileOutputStream.close();
+                    }
+                    nextEntry = zipInputStream.getNextEntry();
+                }
+                zipInputStream.closeEntry();
+                zipInputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

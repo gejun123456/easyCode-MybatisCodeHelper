@@ -1,0 +1,83 @@
+##定义初始变量
+$!{mybatisCodehelper.vm}
+#set($ServiceImplName = $tool.append($tableInfo.name, "ServiceImpl"))
+##设置回调
+##$!callback.setFileName($tool.append($ServiceImplName, ".java"))
+##$!callback.setSavePath($tool.append($tableInfo.savePath, "/service/impl"))
+#set($serviceImplSavePath = $tool.append(${serviceImplSrcFolder},"/",${serviceImplPackageName.replace(".","/")}))
+
+$!callback.setSavePath($serviceImplSavePath)
+$!callback.setFileName($tool.append($ServiceImplName, ".java"))
+
+#set($daoName = $tool.append($tableInfo.name, ${daoSuffix}))
+##拿到主键
+#if(!$tableInfo.pkColumn.isEmpty())
+    #set($pk = $tableInfo.pkColumn.get(0))
+#end
+
+package $!{serviceImplPackageName};
+
+import $!{modelPackageName}.$!{tableInfo.name};
+import ${mapperPackageName}.${daoName};
+import ${servicePackageName}.$!{tableInfo.name}Service;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * $!{tableInfo.comment}($!{tableInfo.name})表服务实现类
+ *
+ * @author $!author
+ * @since $!time.currTime()
+ */
+@Service("$!tool.firstLowerCase($!{tableInfo.name})Service")
+public class $!{ServiceImplName} implements $!{tableInfo.name}Service {
+    @Resource
+    private ${daoName} $!tool.firstLowerCase($daoName);
+
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param $!pk.name 主键
+     * @return 实例对象
+     */
+    @Override
+    public $!{tableInfo.name} queryById($!pk.shortType $!pk.name) {
+        return this.$!{tool.firstLowerCase($daoName)}.selectByPrimaryKey($!pk.name);
+    }
+
+    /**
+     * 新增数据
+     *
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @return 实例对象
+     */
+    @Override
+    public $!{tableInfo.name} insert($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name})) {
+        this.$!{tool.firstLowerCase($daoName)}.insert($!tool.firstLowerCase($!{tableInfo.name}));
+        return $!tool.firstLowerCase($!{tableInfo.name});
+    }
+
+    /**
+     * 修改数据
+     *
+     * @param $!tool.firstLowerCase($!{tableInfo.name}) 实例对象
+     * @return 实例对象
+     */
+    @Override
+    public $!{tableInfo.name} update($!{tableInfo.name} $!tool.firstLowerCase($!{tableInfo.name})) {
+        this.$!{tool.firstLowerCase($daoName)}.update($!tool.firstLowerCase($!{tableInfo.name}));
+        return this.queryById($!{tool.firstLowerCase($!{tableInfo.name})}.get$!tool.firstUpperCase($pk.name)());
+    }
+
+    /**
+     * 通过主键删除数据
+     *
+     * @param $!pk.name 主键
+     * @return 是否成功
+     */
+    @Override
+    public boolean deleteById($!pk.shortType $!pk.name) {
+        return this.$!{tool.firstLowerCase($daoName)}.deleteById($!pk.name) > 0;
+    }
+}

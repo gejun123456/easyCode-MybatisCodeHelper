@@ -1,0 +1,23 @@
+##导入宏定义
+$!{define.vm}
+
+##定义初始变量
+$!{mybatisCodehelper.vm}
+#set($serviceName = $tool.append($tableInfo.name, "Service"))
+##设置回调
+#set($serviceSavePath = $tool.append(${serviceSrcFolder},"/",${servicePackageName.replace(".","/")}))
+
+$!callback.setSavePath($serviceSavePath)
+$!callback.setFileName($tool.append($serviceName, ".java"))
+
+
+
+package $!{servicePackageName};
+import com.baomidou.mybatisplus.extension.service.IService;
+import $!{modelPackageName}.$!{tableInfo.name};
+
+##表注释（宏定义）
+#tableComment("表服务接口")
+public interface $!{serviceName} extends IService<$!tableInfo.name> {
+
+}

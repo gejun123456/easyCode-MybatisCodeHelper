@@ -1,0 +1,53 @@
+##following code can be generated use MybatisCodeHelperPro plugin mybatis generator mingrate to template generate.
+##copy group for different project.
+#set($javamodelSrcFolder="${projectPath}/src/main/java")
+#set($modelPackageName="com.model")
+#set($mapperSrcFolder="${projectPath}/src/main/java")
+#set($mapperPackageName="com.mapper")
+#set($mapperXmlFolder="${projectPath}/src/main/resources")
+#set($mapperXmlPackage="mapperxml")
+#set($serviceSrcFolder="${projectPath}/src/main/java")
+#set($servicePackageName="com.service")
+#set($serviceImplSrcFolder="${projectPath}/src/main/java")
+#set($serviceImplPackageName="com.service.impl")
+#set($controllerSrcFolder="${projectPath}/src/main/java")
+#set($controllerPackageName="com.controller")
+#set($useLombok=true)
+#set($useSwagger=false)
+#set($useOpenApi=false)
+#set($addSchemaName=false)
+#set($mapperSuffix="Mapper")
+#set($daoSuffix="Mapper")
+#set($useActualColumName=false)
+
+#if($useActualColumName)
+    #foreach($column in $tableInfo.fullColumn)
+        $!column.setName($column.obj.name)
+    #end
+#end
+
+#*add model Suffix to model name*#
+###set($modelSuffix="Model")
+##${tableInfo.setName($tool.append($tableInfo.getName(),$modelSuffix))}
+
+
+#*remove column prefix like when column is f_hello want generate hello, you can substring the column name*#
+###set($removeColumnPrefix="f_")
+###foreach($column in $tableInfo.fullColumn)
+##    #if($column.obj.name.startsWith($removeColumnPrefix))
+##        $!column.setName($tool.firstLowerCase($column.getName().substring(1)))
+##    #end
+###end
+
+
+
+###foreach($column in $tableInfo.fullColumn)
+##    #set($propertyName=$column.obj.name)
+##    #set($propertyName=$propertyName.substring(0,1).toLowerCase()+$propertyName.substring(1))
+##    $!column.setName($propertyName)
+##    #if($propertyName.endsWith("ID"))
+##        #set($lenght=$propertyName.length() - 2)
+##        #set($theName=${propertyName.substring(0,$lenght)}+"Id")
+##        $!column.setName($theName)
+##    #end
+###end

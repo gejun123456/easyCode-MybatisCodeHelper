@@ -1,0 +1,12 @@
+#* @implicitly included *#
+#* @vtlvariable name="author" type="java.lang.String" *#
+#* @vtlvariable name="encode" type="java.lang.String" *#
+#* @vtlvariable name="modulePath" type="java.lang.String" *#
+#* @vtlvariable name="projectPath" type="java.lang.String" *#
+#* @vtlvariable name="importList" type="java.util.List<java.lang.String>" *#
+#* @vtlvariable name="callback" type="com.bruce.plugin.entity.Callback" *#
+#* @vtlvariable name="tool" type="com.bruce.plugin.tool.GlobalTool" *#
+#* @vtlvariable name="time" type="com.bruce.plugin.tool.TimeUtils" *#
+#* @vtlvariable name="tableInfo" type="com.bruce.plugin.entity.TableInfo" *#
+#* @vtlvariable name="tableInfoList" type="java.util.List<com.bruce.plugin.entity.TableInfo>" *#
+#* @vtlvariable name="generateService" type="com.bruce.plugin.tool.ExtraCodeGenerateUtils" *#

@@ -1,0 +1,28 @@
+##导入宏定义
+$!{define.vm}
+
+$!{mybatisCodehelper.vm}
+#set($ServiceImplName = $tool.append($tableInfo.name, "ServiceImpl"))
+##设置回调
+##$!callback.setFileName($tool.append($ServiceImplName, ".java"))
+##$!callback.setSavePath($tool.append($tableInfo.savePath, "/service/impl"))
+#set($serviceImplSavePath = $tool.append(${serviceImplSrcFolder},"/",${serviceImplPackageName.replace(".","/")}))
+
+$!callback.setSavePath($serviceImplSavePath)
+$!callback.setFileName($tool.append($ServiceImplName, ".java"))
+
+#set($daoName = $tool.append($tableInfo.name, ${daoSuffix}))
+
+package $!{serviceImplPackageName};
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import $!{modelPackageName}.$!{tableInfo.name};
+import ${mapperPackageName}.${daoName};
+import ${servicePackageName}.$!{tableInfo.name}Service;
+import org.springframework.stereotype.Service;
+
+##表注释（宏定义）
+#tableComment("表服务实现类")
+@Service("$!tool.firstLowerCase($tableInfo.name)Service")
+public class $!{ServiceImplName} extends ServiceImpl<$!{daoName}, $!{tableInfo.name}> implements $!{tableInfo.name}Service {
+
+}

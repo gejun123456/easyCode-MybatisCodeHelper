@@ -1,0 +1,38 @@
+[
+  {
+    "groupName": "MybatisCodeHelperMigrateWithControllerNoServiceInterfaceCopy",
+    "templateName": "MybatisCodeHelperMigrateWithControllerNoServiceInterfaceCopy",
+    "globalConfigName": "MybatisCodeHelperPro",
+    "columnConfigName": "Default.json",
+    "typeMapperName": "Default.json",
+    "tableNameRegex": ".*",
+    "schemaNameRegex": ".*"
+  },
+  {
+    "groupName": "MybatisCodeHelperMigrate",
+    "templateName": "MybatisCodeHelperMigrate",
+    "globalConfigName": "MybatisCodeHelperPro",
+    "columnConfigName": "Default.json",
+    "typeMapperName": "Default.json",
+    "tableNameRegex": ".*",
+    "schemaNameRegex": ".*"
+  },
+  {
+    "groupName": "MybatisCodeHelperMigrateNoServiceNoController",
+    "templateName": "MybatisCodeHelperMigrateNoServiceInterfaceNoController",
+    "globalConfigName": "MybatisCodeHelperPro",
+    "columnConfigName": "Default.json",
+    "typeMapperName": "Default.json",
+    "tableNameRegex": ".*",
+    "schemaNameRegex": ".*"
+  },
+  {
+    "groupName": "MybatisPlus",
+    "templateName": "MybatisPlusMigrate",
+    "globalConfigName": "MybatisCodeHelperPro",
+    "columnConfigName": "Default.json",
+    "typeMapperName": "Default.json",
+    "tableNameRegex": ".*",
+    "schemaNameRegex": ".*"
+  }
+]

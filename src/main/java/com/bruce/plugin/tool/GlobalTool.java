@@ -315,6 +315,22 @@ public class GlobalTool extends NameUtils {
     }
 
     /**
+     * 字符串转全小写
+     * @param str 字符串
+     * @return 转小写后的字符串
+     */
+    public String toLowerCase(String str) {
+        if (null == str) {
+            return null;
+        }
+        if (str.length() <= 0) {
+            return null;
+        }
+
+        return str.toLowerCase();
+    }
+
+    /**
      * 远程调用服务
      *
      * @param name  服务名称
